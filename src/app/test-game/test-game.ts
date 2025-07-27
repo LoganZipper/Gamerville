@@ -16,14 +16,13 @@ export class TestGameComponent implements OnInit {
 
 constructor(private battleService: BattleService) {}
 
-
-
   // ---- ---- ---- ---- \\
   //      Properties     \\
   // ---- ---- ---- ---- \\
 
   // Game State
   private sub!: Subscription;
+  private pigeonKeeper: Subscription | null = null;
 
   // Shared Entities
   public commonDeck: Card[] = [];
@@ -46,6 +45,10 @@ constructor(private battleService: BattleService) {}
 
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
+    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => {
+      this.playerHand.push(card);
+      console.log(`Card sent to player: ${card.rank} of ${card.suit}`);
+    });
     this.initializeGame();
   }
   ngOnDestroy() {
@@ -54,6 +57,7 @@ constructor(private battleService: BattleService) {}
 
   public initializeGame() {
     this.commonDeck = this.createDeck();
+    // this.commonDeck = this.createEuchreDeck();
     this.shuffleDeck(this.commonDeck);
     console.log('Deck created and shuffled');
     this.dealCards();
@@ -64,11 +68,52 @@ constructor(private battleService: BattleService) {}
   //   Public  Methods   \\
   // ---- ---- ---- ---- \\
 
+  // ['♡', '♢', '♧', '♤']
+
 
   public selectCard(card: Card): void {
     this.battlefields.get(1)?.addCard(card);
     this.playerHand = this.playerHand.filter(c => c !== card);
     
+  }
+
+  hoverCard(htmlCard: HTMLElement, card: Card): void {
+    console.log(`Hovering over card: ${card.rank} of ${card.suit}`);
+
+    htmlCard.addEventListener('mouseenter', () => {
+      htmlCard.style.setProperty('background-color', this.getSuitHighlight(card));
+    })
+    htmlCard.addEventListener('mouseleave', () => {
+      htmlCard.style.setProperty('background-color', 'transparent');
+    })
+  }
+
+
+  applyStyles(htmlCard: HTMLElement, card: Card, idx: number, count: number): object {
+    // Do the nasty
+    this.hoverCard(htmlCard, card)
+
+    return {
+      // ...this.getSuitHighlight(card),
+      ...this.getArcStyle(idx, count)
+    };
+  } 
+
+
+  // TODO: fix this fucking monstrosity
+  getSuitHighlight(card: Card): string {
+    switch(card.suit) {
+      case '♡' :
+        return '#9b111f55' 
+      case '♢' :
+        return '#28c8d455' 
+      case '♧' :
+        return '#3aa04255' 
+      case '♤' :
+        return '#392bd655' 
+    }
+
+    return '';
   }
 
 
@@ -95,6 +140,26 @@ constructor(private battleService: BattleService) {}
     return deck;
   }
 
+
+  /**
+   * Creates a Euchre deck with 24 unique cards.
+   * Each card has a suit and a rank.
+   * @returns An array of Card objects representing the Euchre deck.
+   */
+  // private createEuchreDeck(): Card[] {
+  //   const suits = ['♡', '♢', '♧', '♤'];
+  //   const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
+  //   const deck: Card[] = [];
+
+  //   for (const suit of suits) {
+  //     for (const rank of ranks) {
+  //       deck.push({ suit, rank });
+  //     }
+  //   }
+  //   return deck;
+  // }
+
+
   /**
    * Shuffles the deck of cards using the Fisher-Yates algorithm.
    * @param deck The array of Card objects to shuffle.
@@ -114,17 +179,15 @@ constructor(private battleService: BattleService) {}
   private dealCards(): void {
     // TODO: Implement sequential shuffling options
     this.playerHand = this.commonDeck.slice(0, 5);
-    this.oppHand = this.commonDeck.slice(5, 10);
+    this.oppHand = this.commonDeck.slice(6, 10);
     this.commonDeck = this.commonDeck.slice(10);
   }
-
 
 
 
   // ---- ---- ---- ---- \\
   //  Complicated  Shit  \\
   // ---- ---- ---- ---- \\
-
 
 
   getArcStyle(idx: number, count: number): object {

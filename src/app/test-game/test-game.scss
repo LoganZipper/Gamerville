@@ -1,3 +1,4 @@
+/* Test Game Styles */
 .card {
     width: 6em;
     height: 8em;
@@ -60,22 +61,26 @@
 /* Animation Station */
 
 #player .card:hover {
+    // background:
+    //     radial-gradient(ellipse at top left, #e0c91cba, transparent),
+    //     radial-gradient(ellipse at bottom right, #dbdb2d9b, transparent);
     background:
-        radial-gradient(ellipse at top left, #e0c91cba, transparent),
-        radial-gradient(ellipse at bottom right, #dbdb2d9b, transparent);
-    animation: handHover 0.2s ease-in-out;
+        radial-gradient(ellipse at top left, #dddddd66, transparent),
+        radial-gradient(ellipse at bottom right, #dddddd33, transparent);
+    animation: handHover 0.35s ease-in-out;
+    transform: var(--transform, none) scale(1.05);
     text-shadow: 3px 3px rgba(0, 0, 0, 0.75);
 }
 
+// @if 
+
 @keyframes handHover {
-    0% {
-        // background:
-            // radial-gradient(ellipse at center, #c0c00796);
-        transform: var(--transform, none) scale(1.2);
+    50% {
+        transform: var(--transform, none) scale(1.1);
         rotate: var(--rotation, 0deg) ;
     }
     100% {
-        transform: var(-transform, none);
+        transform: var(-transform, none) scale(1.05);
         rotate: var(--rotation, 0deg);
     }
 }

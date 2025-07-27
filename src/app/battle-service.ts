@@ -9,10 +9,15 @@ import { Card } from './card';
 })
 export class BattleService {
   public reset$ = new Subject<void>();
+  public carrierPigeon$ = new Subject<Card>();
 
 
   public resetBattlefield(): void {    
     this.reset$.next();
+  }
+
+  public sendCardToPlayer(card: Card): void {
+    this.carrierPigeon$.next(card);
   }
   
 }

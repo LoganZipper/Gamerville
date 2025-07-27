@@ -38,8 +38,12 @@ export class BattlefieldComponent {
     this.cards.push(card);
   }
 
+  public returnCard(card: Card): void {
+    this.battleService.sendCardToPlayer(card);
+    this.cards = this.cards.filter(c => c !== card);
+  }
+
   public reset(): void {
-  //  this.resetEmitter.set(true);
   this.battleService.resetBattlefield();
    this.cards = [];
   }
