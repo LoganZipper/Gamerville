@@ -45,21 +45,17 @@ constructor(private battleService: BattleService) {}
 
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
-    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => {
-      this.playerHand.push(card);
-      console.log(`Card sent to player: ${card.rank} of ${card.suit}`);
-    });
+    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => this.playerHand.push(card));
     this.initializeGame();
   }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
   public initializeGame() {
     this.commonDeck = this.createDeck();
-    // this.commonDeck = this.createEuchreDeck();
     this.shuffleDeck(this.commonDeck);
-    console.log('Deck created and shuffled');
     this.dealCards();
   }
 
@@ -74,15 +70,16 @@ constructor(private battleService: BattleService) {}
   public selectCard(card: Card): void {
     this.battlefields.get(1)?.addCard(card);
     this.playerHand = this.playerHand.filter(c => c !== card);
-    
   }
 
+  // Change card styles on hover by setting event listeners
   hoverCard(htmlCard: HTMLElement, card: Card): void {
-    console.log(`Hovering over card: ${card.rank} of ${card.suit}`);
-
+    // Set background color based on suit
     htmlCard.addEventListener('mouseenter', () => {
       htmlCard.style.setProperty('background-color', this.getSuitHighlight(card));
     })
+
+    // Reset background color on mouse leave
     htmlCard.addEventListener('mouseleave', () => {
       htmlCard.style.setProperty('background-color', 'transparent');
     })
@@ -149,6 +146,25 @@ constructor(private battleService: BattleService) {}
   // private createEuchreDeck(): Card[] {
   //   const suits = ['♡', '♢', '♧', '♤'];
   //   const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
+  //   const deck: Card[] = [];
+
+  //   for (const suit of suits) {
+  //     for (const rank of ranks) {
+  //       deck.push({ suit, rank });
+  //     }
+  //   }
+  //   return deck;
+  // }
+
+
+  /**
+   * Creates a Spitzer deck with 32 unique cards.
+   * Each card has a suit and a rank.
+   * @returns An array of Card objects representing the Spitzer deck.
+   */
+  // private createSpitzerDeck(): Card[] {
+  //   const suits = ['♡', '♢', '♧', '♤'];
+  //   const ranks = ['7' ,'8' ,'9', '10', 'J', 'Q', 'K', 'A'];
   //   const deck: Card[] = [];
 
   //   for (const suit of suits) {
