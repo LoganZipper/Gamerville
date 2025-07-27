@@ -5,6 +5,7 @@ import { Card } from '../card';
 import { BattlefieldComponent } from "../battlefield/battlefield";
 import { BattleService } from '../battle-service';
 import { Subscription } from 'rxjs';
+import { DeckService } from '../deck-service';
 
 @Component({
   selector: 'app-test-game',
@@ -14,7 +15,9 @@ import { Subscription } from 'rxjs';
 })
 export class TestGameComponent implements OnInit {
 
-constructor(private battleService: BattleService) {}
+constructor(
+  private battleService: BattleService,
+  private deckService: DeckService ) {}
 
   // ---- ---- ---- ---- \\
   //      Properties     \\
@@ -28,8 +31,8 @@ constructor(private battleService: BattleService) {}
   public commonDeck: Card[] = [];
 
   // Player Entities
-  public playerHand: Card[] = [];
-  public playerName: string = 'Player';
+  public povHand: Card[] = [];
+  public povName: string = 'Stinky Fuck';
 
   public oppHand: Card[] = [];
   public oppName: string = 'Opponent';
@@ -45,7 +48,7 @@ constructor(private battleService: BattleService) {}
 
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
-    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => this.playerHand.push(card));
+    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => this.povHand.push(card));
     this.initializeGame();
   }
 
@@ -54,22 +57,20 @@ constructor(private battleService: BattleService) {}
   }
 
   public initializeGame() {
-    this.commonDeck = this.createDeck();
-    this.shuffleDeck(this.commonDeck);
-    this.dealCards();
+    this.deckService.prepareNewGame();
   }
 
 
-  // ---- ---- ---- ---- \\
-  //   Public  Methods   \\
-  // ---- ---- ---- ---- \\
+//    ╭──────────────────╮
+//    │  Public Methods  │
+//    ╰──────────────────╯
 
   // ['♡', '♢', '♧', '♤']
 
 
   public selectCard(card: Card): void {
     this.battlefields.get(1)?.addCard(card);
-    this.playerHand = this.playerHand.filter(c => c !== card);
+    this.povHand = this.povHand.filter(c => c !== card);
   }
 
   // Change card styles on hover by setting event listeners
@@ -114,121 +115,5 @@ constructor(private battleService: BattleService) {}
   }
 
 
-  // ---- ---- ---- ---- \\
-  //  Private   Methods  \\
-  // ---- ---- ---- ---- \\
-
-
-  /**
-   * Creates a standard deck of cards with 52 unique cards.
-   * Each card has a suit and a rank.
-   * @returns An array of Card objects representing the deck.
-   */
-  private createDeck(): Card[] {
-    const suits = ['♡', '♢', '♧', '♤'];
-    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-    const deck: Card[] = [];
-
-    for (const suit of suits) {
-      for (const rank of ranks) {
-        deck.push({ suit, rank });
-      }
-    }
-    return deck;
-  }
-
-
-  /**
-   * Creates a Euchre deck with 24 unique cards.
-   * Each card has a suit and a rank.
-   * @returns An array of Card objects representing the Euchre deck.
-   */
-  // private createEuchreDeck(): Card[] {
-  //   const suits = ['♡', '♢', '♧', '♤'];
-  //   const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
-  //   const deck: Card[] = [];
-
-  //   for (const suit of suits) {
-  //     for (const rank of ranks) {
-  //       deck.push({ suit, rank });
-  //     }
-  //   }
-  //   return deck;
-  // }
-
-
-  /**
-   * Creates a Spitzer deck with 32 unique cards.
-   * Each card has a suit and a rank.
-   * @returns An array of Card objects representing the Spitzer deck.
-   */
-  // private createSpitzerDeck(): Card[] {
-  //   const suits = ['♡', '♢', '♧', '♤'];
-  //   const ranks = ['7' ,'8' ,'9', '10', 'J', 'Q', 'K', 'A'];
-  //   const deck: Card[] = [];
-
-  //   for (const suit of suits) {
-  //     for (const rank of ranks) {
-  //       deck.push({ suit, rank });
-  //     }
-  //   }
-  //   return deck;
-  // }
-
-
-  /**
-   * Shuffles the deck of cards using the Fisher-Yates algorithm.
-   * @param deck The array of Card objects to shuffle.
-   */
-  private shuffleDeck(deck: Card[]): void {
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
-  }
-
-  /**
-   * Deals cards to the player and opponent.
-   * The player receives the first 5 cards, and the opponent receives the next 5 cards.
-   * The remaining cards are left in the common deck.
-   */
-  private dealCards(): void {
-    // TODO: Implement sequential shuffling options
-    this.playerHand = this.commonDeck.slice(0, 5);
-    this.oppHand = this.commonDeck.slice(6, 10);
-    this.commonDeck = this.commonDeck.slice(10);
-  }
-
-
-
-  // ---- ---- ---- ---- \\
-  //  Complicated  Shit  \\
-  // ---- ---- ---- ---- \\
-
-
-  getArcStyle(idx: number, count: number): object {
-
-    if (count <= 1) 
-    {
-      return {};
-    }
-    else if (count % 2 === 1 && idx === Math.floor(count / 2)) {
-      return {
-        '--transform': 'translateY(1.5em)',
-        '--rotation': '0deg',
-      };
-    }
-
-    // ---- \\
-    
-    const midVal = count % 2 === 0 ? (count - 1)/2 : Math.floor(count / 2);
-
-    const transform = `translateY(${Math.abs(idx - midVal)/1.2 * 3}em)`;
-    const rotation = `${((idx - midVal) * 40)/count}deg`
-
-    return {
-      '--transform': transform,
-      '--rotation': rotation,
-    };
-  }
+  
 }
