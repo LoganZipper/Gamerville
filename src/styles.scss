@@ -1,1 +1,528 @@
 /* You can add global styles to this file, and also import other style files */
+$dark-background: #151515;
+$smoky-text: #b0bec5;
+
+$green-velvet: #2e7d32;
+$fog-interlace: #a5d6a7;
+$gold-accent: #ffd54f;
+
+$pure-black: #000000;
+$pure-white: #ffffff;
+$blended-gray: #bdbdbd;
+
+//----------------------\\
+
+// Global Styles
+
+* {
+  color: $smoky-text !important;
+  text-decoration: none;
+}
+
+body {
+  background-color: $dark-background;
+  color: $smoky-text;
+  font-family: "Arial", sans-serif;
+}
+
+::backdrop {
+  z-index: -1000;
+}
+
+text {
+  color: $smoky-text;
+  z-index: 1000;
+}
+
+// Everything Under the Sun
+h1,
+h2,
+h3,
+p,
+a,
+span,
+li {
+  color: $smoky-text;
+  margin: 10px 0;
+}
+
+/**/
+/**/
+/* Combined Styles from a forgotten time */
+/**/
+/**/
+
+/* Imports and Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Grape+Nuts&display=swap");
+
+@font-face {
+  font-family: "Gucci";
+  src: url(./assets/fonts/Roboto-Regular.ttf);
+}
+@font-face {
+  font-family: "Headings";
+  src: url(./assets/fonts/RobotoCondensed-Regular.ttf);
+}
+
+/* Normalize/Reset (from normalize.css) */
+
+html {
+  color: #000;
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+a:focus {
+  outline: thin dotted;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, serif;
+  font-size: 1em;
+}
+pre {
+  white-space: pre-wrap;
+}
+q {
+  quotes: "\201C""\201D""\2018""\2019";
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 0;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
+}
+button,
+input {
+  line-height: normal;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Base Styles */
+body {
+  font-family: "Poppins", "Gucci", Arial, Helvetica, sans-serif;
+  margin: 0 auto;
+  padding: 0;
+  border: 3px solid black;
+}
+h1,
+h2,
+h3,
+h4,
+a {
+  font-family: "Poppins", "Headings", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.75);
+}
+a {
+  text-decoration: none;
+  color: $smoky-text;
+  transition: color 0.3s ease;
+}
+a:hover,
+a:focus {
+  font-weight: bold;
+}
+::placeholder {
+  color: white;
+  opacity: 0.8;
+}
+
+/* Header */
+header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    #111 0%,
+    #222 40%,
+    #222 60%,
+    #111 100%
+  );
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.7) inset;
+  text-align: center;
+  padding: 3em 0;
+}
+header img {
+  float: left;
+}
+header h1 {
+  font-size: 400%;
+  text-align: center;
+  // font-family: "Roboto", "Headings", Arial, sans-serif;
+  letter-spacing: 0.08em;
+  font-family: "Grape Nuts", "Headings", Arial, sans-serif;
+  text-shadow: 3px 3px rgba(21, 21, 21, 0.85);
+  margin: 0 15%;
+  margin-bottom: 0.2em;
+  flex: 1 1 100%;
+  width: fit-content;
+  color:#b6a14dca !important;
+  background-clip: text;
+  background-image: linear-gradient(
+        45deg,
+        #999 5%,
+        #fff 10%,
+        #ccc 30%,
+        #ddd 50%,
+        #ccc 70%,
+        #fff 80%,
+        #999 95%
+    );
+}
+header h3 {
+  font-size: 125%;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.85);
+  text-align: center;
+}
+
+
+/* Navigation */
+#nav_menu {
+  clear: left;
+  border-bottom: 2px solid whitesmoke;
+}
+#nav_menu ul {
+  list-style: none;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+#nav_menu ul li {
+  float: left;
+  width: 20%;
+  padding: 0;
+  list-style: none;
+}
+#nav_menu ul ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+}
+#nav_menu ul ul li {
+  float: none;
+}
+#nav_menu ul li:hover > ul {
+  display: block;
+}
+#nav_menu > ul::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+#nav_menu ul li a {
+  text-align: center;
+  display: block;
+  padding: 0.7em 0;
+  background-color: black;
+  font-weight: bold;
+  color: whitesmoke;
+}
+#nav_menu ul li a.current {
+  color: #fff;
+}
+#nav_menu ul li a:hover,
+#nav_menu ul li a:focus {
+  background-color: rgb(40, 50, 60);
+}
+#nav_menu ul li:hover ul {
+  width: 100%;
+}
+#mobile_menu {
+  display: none;
+}
+
+/* Search */
+#search {
+  width: 100%;
+  color: whitesmoke;
+  border-radius: 5%;
+  padding: 2px;
+  margin-top: 0.2em;
+  margin-bottom: 1px;
+}
+#search input {
+  width: 50%;
+  height: 2em;
+  color: whitesmoke;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px 12px;
+  margin: 0 25%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-left: 2.5em;
+  background-image: url("assets/images/search.png");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 8px center;
+}
+#search input:focus {
+  outline: none;
+  border-color: #fff;
+  box-shadow: 0 0 4px rgba(251, 251, 251, 0.6);
+}
+
+
+/* Lists */
+ul {
+  padding-left: 6%;
+}
+ul li {
+  padding: 0.25em;
+  list-style: square;
+}
+
+/* Forms */
+form {
+  display: grid;
+  grid-template-columns: 30%, 70%;
+}
+label {
+  width: 20%;
+}
+input {
+  width: 40%;
+}
+button {
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  clear: both;
+  color: whitesmoke;
+  border-top: 2px solid black;
+  padding: 1%;
+  margin: 0 auto;
+  background-image: linear-gradient(
+    50deg,
+    black 0%,
+    #333 25%,
+    #555 50%,
+    #333 75%,
+    black 100%
+  );
+}
+footer p {
+  font-size: 90%;
+  text-align: center;
+}
+
+/* Utility */
+.hide {
+  display: block;
+}
+
+
+
+
+/* Card Styles */
+
+.row,
+.twoRow {
+  display: grid;
+  grid-gap: 2%;
+}
+.row {
+  grid-template-columns: repeat(4, 23.3%);
+  margin: 0 -5px;
+  min-height: 150px;
+}
+.twoRow {
+  grid-template-columns: repeat(2, 49%);
+}
+.column {
+  float: left;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.card {
+  width: 5em;
+    height: 6em;
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: #000 12px 5px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 16px;
+  margin: 2.5%;
+  text-align: center;
+  background:
+      radial-gradient(ellipse at top left, #343434, transparent),
+      radial-gradient(ellipse at bottom, #1c1c1c, transparent);
+  border-radius: 5%;
+  border: 1px solid #ccc;
+}
+.card h2 {
+  margin-top: 0;
+}
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-height: 150px;
+  max-width: 100%;
+  left: 50%;
+  top: 50%;
+}
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+
+
+
+
+

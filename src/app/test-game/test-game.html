@@ -1,0 +1,36 @@
+<!-- This component will get a 5 vs 5 hand size with a line in between -->
+
+<!-- The project will be complete when cards are selectable, with animations for
+            selecting cards as well as simply hovering over them.
+     It doesn't need to look good. It just needs to be serviceable. -->
+
+<div class="test-game">
+
+  <div id="opponent">
+    <div class="hand" id="opponent">
+        <div 
+          class="card" 
+          *ngFor="let card of oppHand; let i = index">
+        </div>
+        <app-battlefield></app-battlefield>
+      </div>
+  </div>
+  <div class="line"></div>
+    <div id="player">
+      <app-battlefield></app-battlefield>
+        <div class="hand" >
+            <div
+            class="card"
+            *ngFor="let card of playerHand; let i = index; let c = count"
+            [ngStyle]="getArcStyle(i, c)"
+            (click)="selectCard(card)"
+          >
+          <h2 class="rank">{{ card.rank }}</h2>
+          <span style="text-shadow: 1px 1px 2px #000;">◦</span>
+          <h2 class="suit">{{ card.suit }}</h2>
+          </div>
+          </div>
+          
+        </div>
+      
+</div>

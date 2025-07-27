@@ -1,0 +1,52 @@
+// battlefield.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Card } from '../card';
+import { CommonModule } from '@angular/common';
+import { BattleService } from '../battle-service';
+
+@Component({
+  selector: 'app-battlefield',
+  imports: [CommonModule],
+  templateUrl: './battlefield.html',
+  styleUrl: './battlefield.scss'
+})
+export class BattlefieldComponent {
+  // ---- ---- ---- ---- \\
+  //      Properties     \\
+  // ---- ---- ---- ---- \\
+
+  cards: Card[] = [];
+
+  private sub!: Subscription;
+
+  constructor(private battleService: BattleService) {
+  }
+
+  ngOnInit() {
+    this.sub = this.battleService.reset$.subscribe(() => this.actuallyReset());
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  // ---- ---- ---- ---- \\
+  //    Core   Methods   \\
+  // ---- ---- ---- ---- \\
+
+  public addCard(card: Card): void {
+    this.cards.push(card);
+  }
+
+  public reset(): void {
+  //  this.resetEmitter.set(true);
+  this.battleService.resetBattlefield();
+   this.cards = [];
+  }
+
+  private actuallyReset(): void {
+    this.cards = [];
+    console.log('Battlefield reset');
+  }
+
+}

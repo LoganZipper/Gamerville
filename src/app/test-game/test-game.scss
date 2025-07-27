@@ -1,0 +1,81 @@
+.card {
+    width: 6em;
+    height: 8em;
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: #000 12px 5px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transform: var(--transform, translateY(0));
+    rotate: var(--rotation, 0deg);
+}
+
+.hand {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3%;
+}
+
+
+.line {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    margin: 3em 0;
+}
+
+.test-game {
+    margin-top: 5em;
+    height: calc(100vh - 25em);
+}
+
+
+/* Advanced Styles */
+
+#player .card {
+    border : 1.5px solid whitesmoke;
+    user-select: none;
+}
+
+#opponent .card {
+    background-image: repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 10px,
+        #ccc 50px,
+        #ccc 12px
+    );
+    background-size: 1em 1em;
+    background-repeat: repeat;
+
+    border: 1px solid #888;
+}
+
+
+/* Animation Station */
+
+#player .card:hover {
+    background:
+        radial-gradient(ellipse at top left, #e0c91cba, transparent),
+        radial-gradient(ellipse at bottom right, #dbdb2d9b, transparent);
+    animation: handHover 0.2s ease-in-out;
+    text-shadow: 3px 3px rgba(0, 0, 0, 0.75);
+}
+
+@keyframes handHover {
+    0% {
+        // background:
+            // radial-gradient(ellipse at center, #c0c00796);
+        transform: var(--transform, none) scale(1.2);
+        rotate: var(--rotation, 0deg) ;
+    }
+    100% {
+        transform: var(-transform, none);
+        rotate: var(--rotation, 0deg);
+    }
+}

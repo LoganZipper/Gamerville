@@ -1,0 +1,47 @@
+
+$nav-items: length('.nav-item');
+
+
+#navigation {
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: radial-gradient(
+        ellipse at 50% 50%,
+        rgb(45, 45, 45) 0%,
+        rgb(81, 81, 81) 100%
+    );
+    padding: 20px;
+    box-shadow: 40px 4px 4px rgba(0,0,0,0.1);
+}
+
+#navigation .card {
+    box-shadow: #000 2px 2px 5px;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgb(45, 45, 45) 0%,
+        rgb(42, 41, 29) 100%
+    );
+    border: #8f805a 1px solid;
+    padding: 1em 0;
+    width: 8em !important;;
+    margin: auto 1em;
+}
+
+.nav-item {
+    display: inline-block;
+    color: whitesmoke;
+    text-decoration: none;
+    margin: .3em;
+    padding: .5em 0;
+    height: 10%;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+
+

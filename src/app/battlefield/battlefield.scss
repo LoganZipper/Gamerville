@@ -1,0 +1,20 @@
+.battlefield {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+}
+
+
+#reset {
+    // visibility: hidden;
+    background-color: linear-gradient(
+        50deg,
+        black 0%,
+        #333 25%,
+        #555 50%,
+        #333 75%,
+        black 100%
+    );
+}

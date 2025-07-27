@@ -1,0 +1,8 @@
+<div class="battlefield">
+    <div *ngFor="let card of cards" class="card">
+        <h2 class="suit">{{ card.suit }}</h2>
+        <h2 class="rank">{{ card.rank }}</h2>
+    </div>
+</div>
+
+<button id="reset" (click)="reset()">Reset</button>
