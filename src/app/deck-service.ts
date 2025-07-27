@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DeckType } from './deck-type';
-import { Card } from './card';
-import { Hand } from './hand';
+import { DeckType } from './enum';
+import { Card, Hand } from './satchel';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +10,12 @@ export class DeckService {
   //    ╭───────────────╮
   //    │  Data Fields  │
   //    ╰───────────────╯
-  
+
 
   public selectedDeck: DeckType = DeckType.Standard; // Default deck type
   public commonDeck: Card[] = []; // The deck that is shared among players
-  
-  
+
+
   //    ╭────────────────────╮
   //    │  Card Preferences  │
   //    ╰────────────────────╯
@@ -51,7 +50,7 @@ export class DeckService {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
       const deck: Card[] = [];
-  
+
       for (const suit of suits) {
         for (const rank of ranks) {
           deck.push({ suit, rank });
@@ -59,8 +58,8 @@ export class DeckService {
       }
       return deck;
     }
-  
-  
+
+
     /**
      * Creates a Euchre deck with 24 unique cards.
      * Each card has a suit and a rank.
@@ -70,7 +69,7 @@ export class DeckService {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
       const deck: Card[] = [];
-  
+
       for (const suit of suits) {
         for (const rank of ranks) {
           deck.push({ suit, rank });
@@ -78,8 +77,8 @@ export class DeckService {
       }
       return deck;
     }
-  
-  
+
+
     /**
      * Creates a Spitzer deck with 32 unique cards.
      * Each card has a suit and a rank.
@@ -89,7 +88,7 @@ export class DeckService {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['7' ,'8' ,'9', '10', 'J', 'Q', 'K', 'A'];
       const deck: Card[] = [];
-  
+
       for (const suit of suits) {
         for (const rank of ranks) {
           deck.push({ suit, rank });
@@ -141,10 +140,10 @@ export class DeckService {
   //    │  Prepare New Game  │
   //    ╰────────────────────╯
 
-  public prepareNewGame(): void {
+  public prepareNewGame(): Hand[] {
     this.commonDeck = this.generateDeck();
     this.shuffleDeck(this.commonDeck);
-    this.dealCards();
+    return this.dealCards();
   }
 
 

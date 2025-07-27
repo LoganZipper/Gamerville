@@ -1,7 +1,7 @@
 // battlefield.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Card } from '../card';
+import { Card } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';
 
@@ -18,17 +18,16 @@ export class BattlefieldComponent {
 
   cards: Card[] = [];
 
-  private sub!: Subscription;
+  // private sub!: Subscription;
 
   constructor(private battleService: BattleService) {
   }
 
-  ngOnInit() {
-    this.sub = this.battleService.reset$.subscribe(() => this.actuallyReset());
-  }
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+  // ngOnInit() {
+  // }
+  // ngOnDestroy() {
+  //   this.sub.unsubscribe();
+  // }
 
   // ---- ---- ---- ---- \\
   //    Core   Methods   \\
@@ -47,10 +46,4 @@ export class BattlefieldComponent {
   this.battleService.resetBattlefield();
    this.cards = [];
   }
-
-  private actuallyReset(): void {
-    this.cards = [];
-    console.log('Battlefield reset');
-  }
-
 }

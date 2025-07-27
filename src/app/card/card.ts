@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DeckType } from '../deck-type';
+import { DeckType } from '../enum';
 
 @Component({
   selector: 'app-card',
@@ -11,5 +11,5 @@ export class Card {
 
   suit!: string;
   rank!: string;
-  
+
 }

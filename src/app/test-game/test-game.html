@@ -14,18 +14,6 @@
   <div class="line"></div>
   <div id="player">
     <app-battlefield></app-battlefield>
-    <div class="hand">
-      <div
-        class="card"
-        #trigger
-        *ngFor="let card of playerHand; let i = index; let c = count"
-        [ngStyle]="applyStyles(trigger, card,i,c)"
-        (click)="selectCard(card)"
-      >
-        <h2 class="rank">{{ card.rank }}</h2>
-        <span style="text-shadow: 1px 1px 2px #000">◦</span>
-        <h2 class="suit">{{ card.suit }}</h2>
-      </div>
-    </div>
+    <app-hand></app-hand>
   </div>
 </div>

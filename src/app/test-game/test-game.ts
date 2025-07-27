@@ -1,15 +1,19 @@
 // test-game.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Card } from '../card';
+import { Card } from '../satchel';
+import { Card as POV_Card } from '../card/card';
 import { BattlefieldComponent } from "../battlefield/battlefield";
 import { BattleService } from '../battle-service';
 import { Subscription } from 'rxjs';
 import { DeckService } from '../deck-service';
+import { AnimationStation } from '../animation-station';
+import { PigeonDestination } from '../enum';
+import { Hand } from '../hand/hand';
 
 @Component({
   selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent],
+  imports: [CommonModule, BattlefieldComponent, POV_Card, Hand],
   templateUrl: './test-game.html',
   styleUrls: ['./test-game.scss']
 })
@@ -17,7 +21,8 @@ export class TestGameComponent implements OnInit {
 
 constructor(
   private battleService: BattleService,
-  private deckService: DeckService ) {}
+  private deckService: DeckService,
+  private animationStation: AnimationStation ) {}
 
   // ---- ---- ---- ---- \\
   //      Properties     \\
@@ -48,7 +53,7 @@ constructor(
 
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
-    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => this.povHand.push(card));
+    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.push(object.card));
     this.initializeGame();
   }
 
@@ -57,7 +62,14 @@ constructor(
   }
 
   public initializeGame() {
-    this.deckService.prepareNewGame();
+    const hands = this.deckService.prepareNewGame();
+    // TODO: Backend determines who gets dealt first
+    //          - also determined by type of game
+    this.povHand = hands[0].cards; // delete later and all related
+    this.oppHand = hands[1].cards; // delete later and all related
+
+    this.battleService.sendHandToPlayer(this.povHand, PigeonDestination.Player)
+    this.battleService.sendHandToPlayer(this.oppHand, PigeonDestination.Opponent)
   }
 
 
@@ -73,47 +85,13 @@ constructor(
     this.povHand = this.povHand.filter(c => c !== card);
   }
 
-  // Change card styles on hover by setting event listeners
-  hoverCard(htmlCard: HTMLElement, card: Card): void {
-    // Set background color based on suit
-    htmlCard.addEventListener('mouseenter', () => {
-      htmlCard.style.setProperty('background-color', this.getSuitHighlight(card));
-    })
-
-    // Reset background color on mouse leave
-    htmlCard.addEventListener('mouseleave', () => {
-      htmlCard.style.setProperty('background-color', 'transparent');
-    })
-  }
-
-
   applyStyles(htmlCard: HTMLElement, card: Card, idx: number, count: number): object {
     // Do the nasty
-    this.hoverCard(htmlCard, card)
+    this.animationStation.applyCardHoverHighlight(htmlCard, card)
 
     return {
       // ...this.getSuitHighlight(card),
-      ...this.getArcStyle(idx, count)
+      ...this.animationStation.getHandArcStyleVars(idx, count)
     };
-  } 
-
-
-  // TODO: fix this fucking monstrosity
-  getSuitHighlight(card: Card): string {
-    switch(card.suit) {
-      case '♡' :
-        return '#9b111f55' 
-      case '♢' :
-        return '#28c8d455' 
-      case '♧' :
-        return '#3aa04255' 
-      case '♤' :
-        return '#392bd655' 
-    }
-
-    return '';
   }
-
-
-  
 }
