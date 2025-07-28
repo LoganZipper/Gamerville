@@ -1,11 +1,32 @@
-/* Advanced Styles */
 
-#pov .card {
-    border : 1.5px solid whitesmoke;
-    user-select: none;
+/* General Styles */
+
+
+.card {
+    width: 6em;
+    height: 8em;
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: #000 12px 5px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transform: var(--transform, translateY(0));
+    rotate: var(--rotation, 0deg);
 }
 
-#opponent .card {
+
+
+/* Advanced Styles */
+
+.pov {
+  border: 1.5px solid whitesmoke;
+  user-select: none;
+}
+
+.opponent {
     background-image: repeating-linear-gradient(
         135deg,
         transparent,
@@ -22,7 +43,7 @@
 
 /* Animation Station */
 
-#pov .card:hover {
+.pov:hover {
     // background:
     //     radial-gradient(ellipse at top left, #e0c91cba, transparent),
     //     radial-gradient(ellipse at bottom right, #dbdb2d9b, transparent);

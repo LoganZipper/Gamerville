@@ -6,14 +6,17 @@
 
 <div class="test-game">
   <div id="opponent">
-    <div class="hand" id="opponent">
-      <div class="card" *ngFor="let card of oppHand; let i = index"></div>
-      <app-battlefield></app-battlefield>
-    </div>
+    <app-hand
+      #oppRef
+      [playerType]="oppType"
+      [handInfo]="oppPlayingCards"></app-hand>
   </div>
   <div class="line"></div>
   <div id="player">
     <app-battlefield></app-battlefield>
-    <app-hand></app-hand>
+    <app-hand
+      #povRef
+      [playerType]="povType"
+      [handInfo]="povPlayingCards"></app-hand>
   </div>
 </div>

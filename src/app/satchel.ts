@@ -1,3 +1,4 @@
+import { Card } from "./card/card";
 import { PigeonDestination } from "./enum";
 
 
@@ -6,7 +7,7 @@ import { PigeonDestination } from "./enum";
 //    ╰──────────────────╯
 
 
-export class Card {
+export class PlayingCard {
     suit!: string;
     rank!: string;
 }
@@ -23,11 +24,24 @@ export class Pigeon {
 //    ╭───────────────╮
 //    │  Data Fields  │
 //    ╰───────────────╯
-    card!: Card;
+    card!: PlayingCard;
     destination!: PigeonDestination;
 
-    constructor(card: Card, destination: PigeonDestination) {
+    constructor(card: PlayingCard, destination: PigeonDestination) {
         this.card = card;
+        this.destination = destination;
+    }
+}
+
+export class UltraPigeon {
+//    ╭───────────────╮
+//    │  Data Fields  │
+//    ╰───────────────╯
+    cards!: PlayingCard[];
+    destination!: PigeonDestination;
+
+    constructor(cards: PlayingCard[], destination: PigeonDestination) {
+        this.cards = cards;
         this.destination = destination;
     }
 }
@@ -39,14 +53,14 @@ export class Pigeon {
 //    ╰────────────────╯
 
 
-export class Hand {
+export class HandContainer {
 //    ╭───────────────╮
 //    │  Data Fields  │
 //    ╰───────────────╯
 
-    public cards: Card[] = []; // The cards in the hand
+    public cards: PlayingCard[] = []; // The cards in the hand
 
-    constructor(initialCards: Card[] = []) {
+    constructor(initialCards: PlayingCard[] = []) {
         this.cards = initialCards;
     }
 
@@ -54,11 +68,11 @@ export class Hand {
 //    │  Hand Management   │
 //    ╰────────────────────╯
 
-    public addCard(card: Card): void {
+    public addCard(card: PlayingCard): void {
         this.cards.push(card);
     }
 
-    public removeCard(card: Card): void {
+    public removeCard(card: PlayingCard): void {
         this.cards = this.cards.filter(c => c !== card);
     }
 }

@@ -1,8 +1,7 @@
 // battle-service.ts
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BattlefieldComponent } from './battlefield/battlefield';
-import { Card } from './satchel';
+import { PlayingCard, Pigeon, UltraPigeon } from './satchel';
 import { PigeonDestination } from './enum';
 
 @Injectable({
@@ -10,23 +9,23 @@ import { PigeonDestination } from './enum';
 })
 export class BattleService {
   public reset$ = new Subject<void>();
-  public carrierPigeon$ = new Subject<{ card: Card; destination: PigeonDestination }>();
-  public ultraPigeon$ = new Subject<{ cards: Card[]; destination: PigeonDestination }>();
+  public carrierPigeon$ = new Subject<Pigeon>();
+  public ultraPigeon$ = new Subject<UltraPigeon>();
 
 
   public resetBattlefield(): void {
     this.reset$.next();
   }
 
-  public sendCardToPlayer(card: Card): void {
-    this.carrierPigeon$.next({ card, destination: PigeonDestination.Player });
+  public sendCardToPlayer(card: PlayingCard): void {
+    this.carrierPigeon$.next({ card, destination: PigeonDestination.POV });
   }
 
-  public sendCardToBattlefield(card: Card): void {
-    this.carrierPigeon$.next({ card, destination: PigeonDestination.Player });
+  public sendCardToBattlefield(card: PlayingCard): void {
+    this.carrierPigeon$.next({ card, destination: PigeonDestination.POV });
   }
 
-  public sendHandToPlayer(cards: Card[], destination: PigeonDestination): void {
+  public sendHandToPlayer(cards: PlayingCard[], destination: PigeonDestination): void {
     this.ultraPigeon$.next({ cards, destination });
   }
 

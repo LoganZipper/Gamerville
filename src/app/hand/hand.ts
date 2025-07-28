@@ -1,41 +1,71 @@
+import { PigeonDestination, PlayerType } from './../enum';
 import { BattleService } from './../battle-service';
 import { AnimationStation } from './../animation-station';
-import { Component } from '@angular/core';
-import { Card } from '../satchel';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { PlayingCard, Pigeon, UltraPigeon } from '../satchel';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { Card } from "../card/card";
 
 @Component({
   selector: 'app-hand',
-  imports: [CommonModule],
+  imports: [CommonModule, Card],
   templateUrl: './hand.html',
   styleUrl: './hand.scss'
 })
 export class Hand {
+@Input() playerType: PlayerType = PlayerType.Opponent;
+@Input() handInfo: PlayingCard[] = []; // The player's hand of cards
 
 
 //    ╭───────────────╮
 //    │  Data Fields  │
 //    ╰───────────────╯
 
-public hand: Card[] = []; // The player's hand of cards
+public pigeonMan!: Subscription;
+public hand: Card[] = []; // The hand of cards to be displayed in the UI
+
+public PlayerType = PlayerType;
 
 
 //    ╭────────────────╮
 //    │  Construction  │
 //    ╰────────────────╯
 
-
   constructor(
     private animationStation: AnimationStation,
     private battleService: BattleService,
+    private cdr: ChangeDetectorRef
     ) {}
+
+
+  ngOnInit() {
+    this.pigeonMan = this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
+      if (pigeon.destination.toString() == this.playerType) {
+        this.hand.push(...pigeon.cards.map(card => {
+          const newCard = new Card(this.animationStation);
+          newCard.playingCard = card;
+          return newCard;
+        }));
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  ngOnChanges() {
+  this.hand = this.handInfo.map(card => {
+    const newCard = new Card(this.animationStation);
+    newCard.playingCard = card;
+    return newCard;
+  });
+}
 
 
 //    ╭────────────────╮
 //    │  Visual Setup  │
 //    ╰────────────────╯
 
-  public applyStyles(htmlCard: HTMLElement, card: Card, idx: number, count: number): object {
+  public applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
   // Do the nasty
     this.animationStation.applyCardHoverHighlight(htmlCard, card)
 
@@ -50,15 +80,17 @@ public hand: Card[] = []; // The player's hand of cards
 //    │  Event Listeners  │
 //    ╰───────────────────╯
 
-public selectCard(card: Card): void {
+  public selectCard(selectedCard: Card): void {
 
-// Service gets the card from the hand
-  // and adds it to the battlefield
-this.battleService.sendCardToBattlefield(card);
+    const card: PlayingCard = {suit: selectedCard.playingCard.suit, rank: selectedCard.playingCard.rank};
+    // Service gets the card from the hand
+    //   and adds it to the battlefield
+    this.battleService.sendCardToBattlefield(card);
+    // this.battleService.sendCardToBattlefield(selectedCard.playingCard);
 
 
-// Current Hand remove card
-  this.hand = this.hand.filter(c => c !== card);
-}
+    // Current Hand remove card
+    this.hand = this.hand.filter(c => c !== selectedCard);
+  }
 
 }

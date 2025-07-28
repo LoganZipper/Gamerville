@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Card } from './satchel';
+import { PlayingCard } from './satchel';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AnimationStation {
 
 
   // TODO: fix this fucking monstrosity
-  public getSuitHighlight(card: Card): string {
+  public getSuitHighlight(card: PlayingCard): string {
     switch(card.suit) {
       case '♡' :
         return '#9b111f55'
@@ -42,7 +42,7 @@ export class AnimationStation {
 
 
   // Change card styles on hover by setting event listeners
-  public applyCardHoverHighlight(htmlCard: HTMLElement, card: Card): void {
+  public applyCardHoverHighlight(htmlCard: HTMLElement, card: PlayingCard): void {
     // Set background color based on suit
     htmlCard.addEventListener('mouseenter', () => {
       htmlCard.style.setProperty('background-color', this.getSuitHighlight(card));

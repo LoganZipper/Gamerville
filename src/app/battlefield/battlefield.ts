@@ -1,7 +1,7 @@
 // battlefield.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Card } from '../satchel';
+import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';
 
@@ -16,7 +16,7 @@ export class BattlefieldComponent {
   //      Properties     \\
   // ---- ---- ---- ---- \\
 
-  cards: Card[] = [];
+  cards: PlayingCard[] = [];
 
   // private sub!: Subscription;
 
@@ -33,11 +33,11 @@ export class BattlefieldComponent {
   //    Core   Methods   \\
   // ---- ---- ---- ---- \\
 
-  public addCard(card: Card): void {
+  public addCard(card: PlayingCard): void {
     this.cards.push(card);
   }
 
-  public returnCard(card: Card): void {
+  public returnCard(card: PlayingCard): void {
     this.battleService.sendCardToPlayer(card);
     this.cards = this.cards.filter(c => c !== card);
   }

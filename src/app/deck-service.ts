@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckType } from './enum';
-import { Card, Hand } from './satchel';
+import { PlayingCard, HandContainer } from './satchel';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class DeckService {
 
 
   public selectedDeck: DeckType = DeckType.Standard; // Default deck type
-  public commonDeck: Card[] = []; // The deck that is shared among players
+  public commonDeck: PlayingCard[] = []; // The deck that is shared among players
 
 
   //    ╭────────────────────╮
@@ -25,7 +25,7 @@ export class DeckService {
     this.selectedDeck = deckType;
   }
 
-  public generateDeck(): Card[] {
+  public generateDeck(): PlayingCard[] {
     switch (this.selectedDeck) {
       case DeckType.Euchre:
         return this.createEuchreDeck();
@@ -46,10 +46,10 @@ export class DeckService {
      * Each card has a suit and a rank.
      * @returns An array of Card objects representing the deck.
      */
-    private createFullDeck(): Card[] {
+    private createFullDeck(): PlayingCard[] {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-      const deck: Card[] = [];
+      const deck: PlayingCard[] = [];
 
       for (const suit of suits) {
         for (const rank of ranks) {
@@ -65,10 +65,10 @@ export class DeckService {
      * Each card has a suit and a rank.
      * @returns An array of Card objects representing the Euchre deck.
      */
-    private createEuchreDeck(): Card[] {
+    private createEuchreDeck(): PlayingCard[] {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
-      const deck: Card[] = [];
+      const deck: PlayingCard[] = [];
 
       for (const suit of suits) {
         for (const rank of ranks) {
@@ -84,10 +84,10 @@ export class DeckService {
      * Each card has a suit and a rank.
      * @returns An array of Card objects representing the Spitzer deck.
      */
-    private createSpitzerDeck(): Card[] {
+    private createSpitzerDeck(): PlayingCard[] {
       const suits = ['♡', '♢', '♧', '♤'];
       const ranks = ['7' ,'8' ,'9', '10', 'J', 'Q', 'K', 'A'];
-      const deck: Card[] = [];
+      const deck: PlayingCard[] = [];
 
       for (const suit of suits) {
         for (const rank of ranks) {
@@ -107,7 +107,7 @@ export class DeckService {
    * Shuffles the deck of cards using the Fisher-Yates algorithm.
    * @param deck The array of Card objects to shuffle.
    */
-  private shuffleDeck(deck: Card[]): void {
+  private shuffleDeck(deck: PlayingCard[]): void {
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -125,13 +125,14 @@ export class DeckService {
   |* The player receives the first 5 cards, and the opponent receives the next 5 cards.
   |* The remaining cards are left in the common deck.
   |**/
-  private dealCards(): Hand[] {
-    const hands: Hand[] = [];
+  private dealCards(): HandContainer[] {
+    const hands: HandContainer[] = [];
     // TODO: Implement sequential shuffling options
-    const playerHand = new Hand(this.commonDeck.slice(0, 5));
-    const oppHand = new Hand(this.commonDeck.slice(5, 10));
+    const playerHand = new HandContainer(this.commonDeck.slice(0, 5));
+    const oppHand = new HandContainer(this.commonDeck.slice(5, 10));
     hands.push(playerHand, oppHand);
     this.commonDeck = this.commonDeck.slice(10);
+    console.log('Dealt hands:');
     return hands;
   }
 
@@ -140,7 +141,7 @@ export class DeckService {
   //    │  Prepare New Game  │
   //    ╰────────────────────╯
 
-  public prepareNewGame(): Hand[] {
+  public prepareNewGame(): HandContainer[] {
     this.commonDeck = this.generateDeck();
     this.shuffleDeck(this.commonDeck);
     return this.dealCards();

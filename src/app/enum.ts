@@ -5,7 +5,13 @@ export enum DeckType {
 }
 
 export enum PigeonDestination {
-    Player = 'player',
+    POV = 'pov',
     Opponent = 'opponent',
     Battlefield = 'battlefield'
 }
+
+export enum PlayerType {
+  POV = 'pov',
+  Opponent = 'opponent',
+}
+

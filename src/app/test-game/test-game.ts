@@ -1,19 +1,19 @@
 // test-game.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Card } from '../satchel';
-import { Card as POV_Card } from '../card/card';
+import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { HandContainer, PlayingCard } from '../satchel';
+import { Card } from '../card/card';
 import { BattlefieldComponent } from "../battlefield/battlefield";
 import { BattleService } from '../battle-service';
 import { Subscription } from 'rxjs';
 import { DeckService } from '../deck-service';
 import { AnimationStation } from '../animation-station';
-import { PigeonDestination } from '../enum';
+import { PigeonDestination, PlayerType } from '../enum';
 import { Hand } from '../hand/hand';
 
 @Component({
   selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent, POV_Card, Hand],
+  imports: [CommonModule, BattlefieldComponent, Hand],
   templateUrl: './test-game.html',
   styleUrls: ['./test-game.scss']
 })
@@ -22,39 +22,51 @@ export class TestGameComponent implements OnInit {
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation ) {}
+  private animationStation: AnimationStation,
+  private cdr: ChangeDetectorRef,) {}
 
-  // ---- ---- ---- ---- \\
-  //      Properties     \\
-  // ---- ---- ---- ---- \\
+  //    ╭────────────────╮
+  //    │   Properties   │
+  //    ╰────────────────╯
 
   // Game State
   private sub!: Subscription;
   private pigeonKeeper: Subscription | null = null;
 
   // Shared Entities
-  public commonDeck: Card[] = [];
+  public commonDeck: PlayingCard[] = [];
 
   // Player Entities
-  public povHand: Card[] = [];
-  public povName: string = 'Stinky Fuck';
+  @ViewChild('povRef') povHand!: HandContainer;
+  @ViewChild('oppRef') oppHand!: HandContainer;
 
-  public oppHand: Card[] = [];
-  public oppName: string = 'Opponent';
+  public povPlayingCards: PlayingCard[] = [];
+  public oppPlayingCards: PlayingCard[] = [];
+
+
+  public povType: PlayerType = PlayerType.POV;
+  public oppType: PlayerType = PlayerType.Opponent;
 
 
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
 
-  // ---- ---- ---- ---- \\
-  //    Core   Methods   \\
-  // ---- ---- ---- ---- \\
+
+
+  //    ╭────────────────────╮
+  //    │    Core  Methods   │
+  //    ╰────────────────────╯
 
 
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
-    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.push(object.card));
-    this.initializeGame();
+     this.initializeGame();
+     this.cdr.detectChanges();
+  }
+
+  ngAfterViewInit() {
+
+    // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
   }
 
   ngOnDestroy() {
@@ -65,11 +77,17 @@ constructor(
     const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
-    this.povHand = hands[0].cards; // delete later and all related
-    this.oppHand = hands[1].cards; // delete later and all related
 
-    this.battleService.sendHandToPlayer(this.povHand, PigeonDestination.Player)
-    this.battleService.sendHandToPlayer(this.oppHand, PigeonDestination.Opponent)
+    this.povHand = hands[0];
+    this.oppHand = hands[1];
+
+    this.povPlayingCards = hands[0].cards;
+    this.oppPlayingCards = hands[1].cards;
+
+    console.log('Send hand to players');
+
+    this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
+    this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
   }
 
 
@@ -80,12 +98,12 @@ constructor(
   // ['♡', '♢', '♧', '♤']
 
 
-  public selectCard(card: Card): void {
+  public selectCard(card: PlayingCard): void {
     this.battlefields.get(1)?.addCard(card);
-    this.povHand = this.povHand.filter(c => c !== card);
+    this.povHand.cards = this.povHand.cards.filter(c => c !== card);
   }
 
-  applyStyles(htmlCard: HTMLElement, card: Card, idx: number, count: number): object {
+  applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty
     this.animationStation.applyCardHoverHighlight(htmlCard, card)
 
@@ -94,4 +112,8 @@ constructor(
       ...this.animationStation.getHandArcStyleVars(idx, count)
     };
   }
+
+  // public getPlayerType(): string {
+  //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
+  // }
 }

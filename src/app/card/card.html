@@ -1,1 +1,13 @@
-<p>card works!</p>
+<div
+    class="card"
+    [class.pov]="isPlayer"
+    [class.opponent]="!isPlayer"
+    #htmlCard
+    [ngStyle]="applyStyles(htmlCard, playingCard, positionInfo.i, positionInfo.c)"
+  >
+    <ng-container *ngIf="isPlayer">
+      <h2 class="rank">{{ playingCard.rank }}</h2>
+      <span class="card-decoration">◦</span>
+      <h2 class="suit">{{ playingCard.suit }}</h2>
+    </ng-container>
+  </div>
