@@ -126,7 +126,6 @@ export class DeckService {
     const oppHand = new HandContainer(this.commonDeck.slice(5, 10));
     hands.push(playerHand, oppHand);
     this.commonDeck = this.commonDeck.slice(10);
-    console.log('Dealt hands:');
     return hands;
   }
 
