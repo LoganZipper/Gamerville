@@ -1,5 +1,22 @@
+// Stephen's Bag of Holding
+//   ft. a deck of many things
+
+import { Input } from '@angular/core';
+
 import { Card } from "./card/card";
 import { PigeonDestination } from "./enum";
+
+
+//    ╭───────────────╮
+//    │   Constants   │
+//    ╰───────────────╯
+
+export const Suits = ['♡', '♢', '♧', '♤'];
+export const Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+export const EuchreRanks = ['9', '10', 'J', 'Q', 'K', 'A'];
+export const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+
 
 
 //    ╭──────────────────╮
@@ -7,9 +24,24 @@ import { PigeonDestination } from "./enum";
 //    ╰──────────────────╯
 
 
+let playingCardIdCounter = 1;
+
 export class PlayingCard {
-    suit!: string;
-    rank!: string;
+  suit!: string;
+  rank!: string;
+  id: number;
+
+  constructor(suit: string, rank: string);
+  constructor(suit: string, rank: string, id: number);
+  constructor(suit: string, rank: string, id?: number) {
+    this.suit = suit;
+    this.rank = rank;
+    if (id !== undefined) {
+      this.id = id;
+    } else {
+      this.id = playingCardIdCounter++;
+    }
+  }
 }
 
 
@@ -26,6 +58,7 @@ export class Pigeon {
 //    ╰───────────────╯
     card!: PlayingCard;
     destination!: PigeonDestination;
+    id?: number; // Optional ID for card tracking
 
     constructor(card: PlayingCard, destination: PigeonDestination) {
         this.card = card;

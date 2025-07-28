@@ -3,10 +3,11 @@ import { Component, Input } from '@angular/core';
 import { DeckType } from '../enum';
 import { CommonModule } from '@angular/common';
 import { PlayingCard } from '../satchel';
+import { CardFace } from "../card-face/card-face";
 
 @Component({
   selector: 'app-card',
-  imports: [CommonModule],
+  imports: [CommonModule, CardFace],
   templateUrl: './card.html',
   styleUrl: './card.scss'
 })
@@ -15,7 +16,7 @@ export class Card {
   @Input() playingCard!: PlayingCard;
   // @Input() styles: object = {};
   // @Input() position: object = {};
-  @Input() positionInfo: { i: number, c: number } = { i: 0, c: 0 };
+  @Input() positionInfo!: { i: number, c: number };
   @Input() isPlayer: boolean = false;
 
   //    ╭───────────────╮
@@ -37,19 +38,6 @@ export class Card {
 //    ╭───────────────────╮
 //    │  Event Listeners  │
 //    ╰───────────────────╯
-
-  // public selectCard(card: Card): void {
-
-  // // Service gets the card from the hand
-  // //   // and adds it to the battlefield
-  // // this.battleService.sendCardToBattlefield(card);
-
-
-  // // // Current Hand remove card
-  // //   this.hand = this.hand.filter(c => c !== card);
-  // }
-
-
 
 
   //    ╭────────────────╮

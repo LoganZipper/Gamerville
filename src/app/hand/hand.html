@@ -2,8 +2,8 @@
     <app-card
     *ngFor="let card of hand; let i = index; let c = count"
     [card]="card"
-    [playingCard]="handInfo[i]"
+    [playingCard]="card.playingCard"
     [positionInfo]="{i,c}"
     [isPlayer]="playerType === PlayerType.POV"
-    (click)="selectCard(card)"></app-card>
+    (click)="playerType === PlayerType.POV && selectCard(card.playingCard)"></app-card>
 </div>

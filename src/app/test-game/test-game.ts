@@ -22,8 +22,7 @@ export class TestGameComponent implements OnInit {
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation,
-  private cdr: ChangeDetectorRef,) {}
+  private animationStation: AnimationStation) {}
 
   //    ╭────────────────╮
   //    │   Properties   │
@@ -61,7 +60,6 @@ constructor(
   ngOnInit() {
     this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
      this.initializeGame();
-     this.cdr.detectChanges();
   }
 
   ngAfterViewInit() {
@@ -73,7 +71,7 @@ constructor(
     this.sub.unsubscribe();
   }
 
-  public initializeGame() {
+  private initializeGame() {
     const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
@@ -85,6 +83,7 @@ constructor(
     this.oppPlayingCards = hands[1].cards;
 
     console.log('Send hand to players');
+    console.log(this.povPlayingCards);
 
     this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
     this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
@@ -95,13 +94,6 @@ constructor(
 //    │  Public Methods  │
 //    ╰──────────────────╯
 
-  // ['♡', '♢', '♧', '♤']
-
-
-  public selectCard(card: PlayingCard): void {
-    this.battlefields.get(1)?.addCard(card);
-    this.povHand.cards = this.povHand.cards.filter(c => c !== card);
-  }
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty

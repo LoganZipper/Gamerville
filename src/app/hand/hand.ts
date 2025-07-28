@@ -41,6 +41,7 @@ public PlayerType = PlayerType;
 
   ngOnInit() {
     const subscriptions = [
+      // First subscription: Gets the initial hand of cards
       this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
       if (pigeon.destination.toString() == this.playerType) {
         this.hand.push(...pigeon.cards.map(card => {
@@ -51,6 +52,7 @@ public PlayerType = PlayerType;
         this.cdr.detectChanges();
       }
       }),
+      // Second subscription: Gets cards returned from battlefield
       this.battleService.carrierPigeon$.subscribe((pigeon: Pigeon) => {
       if (pigeon.destination.toString() == this.playerType) {
         const newCard = new Card(this.animationStation);
@@ -92,17 +94,17 @@ public PlayerType = PlayerType;
 //    │  Event Listeners  │
 //    ╰───────────────────╯
 
-  public selectCard(selectedCard: Card): void {
-
-    const card: PlayingCard = {suit: selectedCard.playingCard.suit, rank: selectedCard.playingCard.rank};
+  public selectCard(playingCard: PlayingCard): void {
     // Service gets the card from the hand
     //   and adds it to the battlefield
-    this.battleService.sendCardToBattlefield(card);
-    // this.battleService.sendCardToBattlefield(selectedCard.playingCard);
+    this.battleService.sendCardToBattlefield(playingCard);
 
 
     // Current Hand remove card
-    this.hand = this.hand.filter(c => c !== selectedCard);
+    // TODO: Use a service to remove the card from the hand
+    console.log(this.hand)
+    this.hand = this.hand.filter(c => c.playingCard.id !== playingCard.id);
+    this.handInfo = this.handInfo.filter(c => c.id !== playingCard.id);
   }
 
 }

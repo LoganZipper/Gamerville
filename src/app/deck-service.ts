@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckType } from './enum';
-import { PlayingCard, HandContainer } from './satchel';
+import { PlayingCard, HandContainer, Suits, Ranks } from './satchel';
 
 @Injectable({
   providedIn: 'root'
@@ -47,13 +47,11 @@ export class DeckService {
      * @returns An array of Card objects representing the deck.
      */
     private createFullDeck(): PlayingCard[] {
-      const suits = ['♡', '♢', '♧', '♤'];
-      const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
       const deck: PlayingCard[] = [];
 
-      for (const suit of suits) {
-        for (const rank of ranks) {
-          deck.push({ suit, rank });
+      for (const suit of Suits) {
+        for (const rank of Ranks) {
+          deck.push(new PlayingCard(suit, rank));
         }
       }
       return deck;
@@ -66,13 +64,11 @@ export class DeckService {
      * @returns An array of Card objects representing the Euchre deck.
      */
     private createEuchreDeck(): PlayingCard[] {
-      const suits = ['♡', '♢', '♧', '♤'];
-      const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
       const deck: PlayingCard[] = [];
 
-      for (const suit of suits) {
-        for (const rank of ranks) {
-          deck.push({ suit, rank });
+      for (const suit of Suits) {
+        for (const rank of Ranks) {
+          deck.push(new PlayingCard(suit, rank));
         }
       }
       return deck;
@@ -85,13 +81,11 @@ export class DeckService {
      * @returns An array of Card objects representing the Spitzer deck.
      */
     private createSpitzerDeck(): PlayingCard[] {
-      const suits = ['♡', '♢', '♧', '♤'];
-      const ranks = ['7' ,'8' ,'9', '10', 'J', 'Q', 'K', 'A'];
       const deck: PlayingCard[] = [];
 
-      for (const suit of suits) {
-        for (const rank of ranks) {
-          deck.push({ suit, rank });
+      for (const suit of Suits) {
+        for (const rank of Ranks) {
+          deck.push(new PlayingCard(suit, rank));
         }
       }
       return deck;

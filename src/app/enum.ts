@@ -4,6 +4,13 @@ export enum DeckType {
     Spitzer = 'spitzer'
 }
 
+export enum Suit {
+    Heart = '♡',
+    Diamond = '♢',
+    Club = '♧',
+    Spade = '♤'
+}
+
 export enum PigeonDestination {
     POV = 'pov',
     Opponent = 'opponent',

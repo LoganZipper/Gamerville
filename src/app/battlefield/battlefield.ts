@@ -27,7 +27,6 @@ export class BattlefieldComponent {
 
   ngOnInit() {
     this.pigeonScout = this.battleService.carrierPigeon$.subscribe((pigeon) => {
-      console.log('Battlefield received pigeon');
       if (pigeon.destination === PigeonDestination.Battlefield) {
         this.addCard(pigeon.card);
       }

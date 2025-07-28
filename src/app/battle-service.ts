@@ -21,12 +21,11 @@ export class BattleService {
     this.carrierPigeon$.next({ card, destination: PigeonDestination.POV });
   }
 
-  public sendCardToBattlefield(card: PlayingCard): void {
-    this.carrierPigeon$.next({ card, destination: PigeonDestination.Battlefield });
+  public sendCardToBattlefield(card: PlayingCard, id?: number): void {
+    this.carrierPigeon$.next({ card, id, destination: PigeonDestination.Battlefield });
   }
 
   public sendHandToPlayer(cards: PlayingCard[], destination: PigeonDestination): void {
     this.ultraPigeon$.next({ cards, destination });
   }
-
 }
