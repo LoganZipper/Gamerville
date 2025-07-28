@@ -102,7 +102,6 @@ public PlayerType = PlayerType;
 
     // Current Hand remove card
     // TODO: Use a service to remove the card from the hand
-    console.log(this.hand)
     this.hand = this.hand.filter(c => c.playingCard.id !== playingCard.id);
     this.handInfo = this.handInfo.filter(c => c.id !== playingCard.id);
   }

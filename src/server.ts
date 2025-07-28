@@ -59,6 +59,21 @@ if (isMainModule(import.meta.url)) {
     }
 
     console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log('Ladies and genlemen...')
+    console.log('It is my pleasure to introduce you to');
+    console.log(`
+                                     ▄▄    ▄▄    ▄▄
+    ▄▄█▀▀▀█▄█                                                      ██  ▀███  ▀███
+  ▄██▀     ▀█                                                            ██    ██
+  ██▀       ▀ ▄█▀██▄ ▀████████▄█████▄   ▄▄█▀██▀███▄███▀██▀   ▀██▀▀███    ██    ██   ▄▄█▀██
+  ██         ██   ██   ██    ██    ██  ▄█▀   ██ ██▀ ▀▀  ██   ▄█    ██    ██    ██  ▄█▀   ██
+  ██▄    ▀████▄█████   ██    ██    ██  ██▀▀▀▀▀▀ ██       ██ ▄█     ██    ██    ██  ██▀▀▀▀▀▀
+  ▀██▄     ████   ██   ██    ██    ██  ██▄    ▄ ██        ███      ██    ██  ██▄    ▄
+    ▀▀███████▀████▀██▄████  ████  ████▄ ▀█████▀████▄       █     ▄████▄▄████▄▄████▄ ▀█████▀
+    `);
+
+
+
   });
 }
 

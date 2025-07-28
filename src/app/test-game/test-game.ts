@@ -29,7 +29,7 @@ constructor(
   //    ╰────────────────╯
 
   // Game State
-  private sub!: Subscription;
+  private fuze$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
 
   // Shared Entities
@@ -58,7 +58,7 @@ constructor(
 
 
   ngOnInit() {
-    this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
+    this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
      this.initializeGame();
   }
 
@@ -68,7 +68,7 @@ constructor(
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.fuze$.unsubscribe();
   }
 
   private initializeGame() {
@@ -81,9 +81,6 @@ constructor(
 
     this.povPlayingCards = hands[0].cards;
     this.oppPlayingCards = hands[1].cards;
-
-    console.log('Send hand to players');
-    console.log(this.povPlayingCards);
 
     this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
     this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
