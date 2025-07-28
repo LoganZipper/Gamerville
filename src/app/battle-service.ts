@@ -22,7 +22,7 @@ export class BattleService {
   }
 
   public sendCardToBattlefield(card: PlayingCard): void {
-    this.carrierPigeon$.next({ card, destination: PigeonDestination.POV });
+    this.carrierPigeon$.next({ card, destination: PigeonDestination.Battlefield });
   }
 
   public sendHandToPlayer(cards: PlayingCard[], destination: PigeonDestination): void {

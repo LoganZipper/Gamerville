@@ -1,9 +1,9 @@
 // battlefield.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';
+import { PigeonDestination } from '../enum';
 
 @Component({
   selector: 'app-battlefield',
@@ -12,26 +12,36 @@ import { BattleService } from '../battle-service';
   styleUrl: './battlefield.scss'
 })
 export class BattlefieldComponent {
-  // ---- ---- ---- ---- \\
-  //      Properties     \\
-  // ---- ---- ---- ---- \\
+
+  //    ╭──────────────╮
+  //    │  Properties  │
+  //    ╰──────────────╯
 
   cards: PlayingCard[] = [];
 
   // private sub!: Subscription;
+  private pigeonScout: any;
 
   constructor(private battleService: BattleService) {
   }
 
-  // ngOnInit() {
-  // }
-  // ngOnDestroy() {
-  //   this.sub.unsubscribe();
-  // }
+  ngOnInit() {
+    this.pigeonScout = this.battleService.carrierPigeon$.subscribe((pigeon) => {
+      console.log('Battlefield received pigeon');
+      if (pigeon.destination === PigeonDestination.Battlefield) {
+        this.addCard(pigeon.card);
+      }
+    });
+  }
 
-  // ---- ---- ---- ---- \\
-  //    Core   Methods   \\
-  // ---- ---- ---- ---- \\
+  ngOnDestroy() {
+    this.pigeonScout.unsubscribe();
+  }
+
+
+  //    ╭────────────────╮
+  //    │  Core Methods  │
+  //    ╰────────────────╯
 
   public addCard(card: PlayingCard): void {
     this.cards.push(card);

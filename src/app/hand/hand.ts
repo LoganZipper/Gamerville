@@ -22,7 +22,7 @@ export class Hand {
 //    │  Data Fields  │
 //    ╰───────────────╯
 
-public pigeonMan!: Subscription;
+public pigeonMan: Subscription = new Subscription();
 public hand: Card[] = []; // The hand of cards to be displayed in the UI
 
 public PlayerType = PlayerType;
@@ -40,16 +40,28 @@ public PlayerType = PlayerType;
 
 
   ngOnInit() {
-    this.pigeonMan = this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
+    const subscriptions = [
+      this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
       if (pigeon.destination.toString() == this.playerType) {
         this.hand.push(...pigeon.cards.map(card => {
-          const newCard = new Card(this.animationStation);
-          newCard.playingCard = card;
-          return newCard;
+        const newCard = new Card(this.animationStation);
+        newCard.playingCard = card;
+        return newCard;
         }));
         this.cdr.detectChanges();
       }
-    });
+      }),
+      this.battleService.carrierPigeon$.subscribe((pigeon: Pigeon) => {
+      if (pigeon.destination.toString() == this.playerType) {
+        const newCard = new Card(this.animationStation);
+        newCard.playingCard = pigeon.card;
+        this.hand.push(newCard);
+        this.cdr.detectChanges();
+      }
+      })
+    ];
+
+    subscriptions.forEach(sub => this.pigeonMan.add(sub));
   }
 
   ngOnChanges() {
