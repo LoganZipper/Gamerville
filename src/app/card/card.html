@@ -1,0 +1,13 @@
+<div
+    class="card"
+    [class.pov]="isPlayer"
+    [class.opponent]="!isPlayer"
+    #htmlCard
+    [ngStyle]="applyStyles(htmlCard, playingCard, positionInfo.i, positionInfo.c)"
+  >
+    <app-card-face
+      *ngIf="isPlayer"
+      [playingCard]="playingCard">
+    </app-card-face>
+
+  </div>

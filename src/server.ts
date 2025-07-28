@@ -12,6 +12,23 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+    console.log('Ladies and gentlemen...')
+    console.log('It is my pleasure to introduce you to');
+    console.log(`
+
+    ▄▄█▀▀▀█▄█                                                      ██  ▀███  ▀███
+  ▄██▀     ▀█                                                            ██    ██
+  ██▀       ▀ ▄█▀██▄ ▀████████▄█████▄   ▄▄█▀██▀███▄███▀██▀   ▀██▀▀███    ██    ██   ▄▄█▀██
+  ██         ██   ██   ██    ██    ██  ▄█▀   ██ ██▀ ▀▀  ██   ▄█    ██    ██    ██  ▄█▀   ██
+  ██▄    ▀████▄█████   ██    ██    ██  ██▀▀▀▀▀▀ ██       ██ ▄█     ██    ██    ██  ██▀▀▀▀▀▀
+  ▀██▄     ████   ██   ██    ██    ██  ██▄    ▄ ██        ███      ██    ██  ██▄    ▄
+    ▀▀███████▀████▀██▄████  ████  ████▄ ▀█████▀████▄       █     ▄████▄▄████▄▄████▄ ▀█████▀
+    `);
+    console.log('────────────────────────────────────────────────────────────────────────────────────────────');
+    console.log('============================================================================================');
+    console.log('────────────────────────────────────────────────────────────────────────────────────────────');
+
+
 /**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.
@@ -59,6 +76,7 @@ if (isMainModule(import.meta.url)) {
     }
 
     console.log(`Node Express server listening on http://localhost:${port}`);
+
   });
 }
 

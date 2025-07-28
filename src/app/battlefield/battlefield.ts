@@ -1,9 +1,9 @@
 // battlefield.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Card } from '../card';
+import { Component } from '@angular/core';
+import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';
+import { PigeonDestination } from '../enum';
 
 @Component({
   selector: 'app-battlefield',
@@ -12,33 +12,41 @@ import { BattleService } from '../battle-service';
   styleUrl: './battlefield.scss'
 })
 export class BattlefieldComponent {
-  // ---- ---- ---- ---- \\
-  //      Properties     \\
-  // ---- ---- ---- ---- \\
 
-  cards: Card[] = [];
+  //    ╭──────────────╮
+  //    │  Properties  │
+  //    ╰──────────────╯
 
-  private sub!: Subscription;
+  cards: PlayingCard[] = [];
+
+  // private sub!: Subscription;
+  private pigeonScout: any;
 
   constructor(private battleService: BattleService) {
   }
 
   ngOnInit() {
-    this.sub = this.battleService.reset$.subscribe(() => this.actuallyReset());
+    this.pigeonScout = this.battleService.carrierPigeon$.subscribe((pigeon) => {
+      if (pigeon.destination === PigeonDestination.Battlefield) {
+        this.addCard(pigeon.card);
+      }
+    });
   }
+
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.pigeonScout.unsubscribe();
   }
 
-  // ---- ---- ---- ---- \\
-  //    Core   Methods   \\
-  // ---- ---- ---- ---- \\
 
-  public addCard(card: Card): void {
+  //    ╭────────────────╮
+  //    │  Core Methods  │
+  //    ╰────────────────╯
+
+  public addCard(card: PlayingCard): void {
     this.cards.push(card);
   }
 
-  public returnCard(card: Card): void {
+  public returnCard(card: PlayingCard): void {
     this.battleService.sendCardToPlayer(card);
     this.cards = this.cards.filter(c => c !== card);
   }
@@ -47,10 +55,4 @@ export class BattlefieldComponent {
   this.battleService.resetBattlefield();
    this.cards = [];
   }
-
-  private actuallyReset(): void {
-    this.cards = [];
-    console.log('Battlefield reset');
-  }
-
 }

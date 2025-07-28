@@ -1,218 +1,108 @@
 // test-game.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Card } from '../card';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { HandContainer, PlayingCard } from '../satchel';
 import { BattlefieldComponent } from "../battlefield/battlefield";
 import { BattleService } from '../battle-service';
 import { Subscription } from 'rxjs';
+import { DeckService } from '../deck-service';
+import { AnimationStation } from '../animation-station';
+import { PigeonDestination, PlayerType } from '../enum';
+import { Hand } from '../hand/hand';
 
 @Component({
   selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent],
+  imports: [CommonModule, BattlefieldComponent, Hand],
   templateUrl: './test-game.html',
   styleUrls: ['./test-game.scss']
 })
 export class TestGameComponent implements OnInit {
 
-constructor(private battleService: BattleService) {}
+constructor(
+  private battleService: BattleService,
+  private deckService: DeckService,
+  private animationStation: AnimationStation) {}
 
-  // ---- ---- ---- ---- \\
-  //      Properties     \\
-  // ---- ---- ---- ---- \\
+  //    ╭────────────────╮
+  //    │   Properties   │
+  //    ╰────────────────╯
 
   // Game State
-  private sub!: Subscription;
+  private fuze$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
 
   // Shared Entities
-  public commonDeck: Card[] = [];
+  public commonDeck: PlayingCard[] = [];
 
   // Player Entities
-  public playerHand: Card[] = [];
-  public playerName: string = 'Player';
+  @ViewChild('povRef') povHand!: HandContainer;
+  @ViewChild('oppRef') oppHand!: HandContainer;
 
-  public oppHand: Card[] = [];
-  public oppName: string = 'Opponent';
+  public povPlayingCards: PlayingCard[] = [];
+  public oppPlayingCards: PlayingCard[] = [];
+
+
+  public povType: PlayerType = PlayerType.POV;
+  public oppType: PlayerType = PlayerType.Opponent;
 
 
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
 
-  // ---- ---- ---- ---- \\
-  //    Core   Methods   \\
-  // ---- ---- ---- ---- \\
+
+
+  //    ╭───────────────────╮
+  //    │   Core  Methods   │
+  //    ╰───────────────────╯
 
 
   ngOnInit() {
-    this.sub = this.battleService.reset$.subscribe(() => this.initializeGame());
-    this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((card: Card) => {
-      this.playerHand.push(card);
-      console.log(`Card sent to player: ${card.rank} of ${card.suit}`);
-    });
-    this.initializeGame();
+    this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
+     this.initializeGame();
   }
+
+  ngAfterViewInit() {
+
+    // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
+  }
+
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.fuze$.unsubscribe();
   }
 
-  public initializeGame() {
-    this.commonDeck = this.createDeck();
-    // this.commonDeck = this.createEuchreDeck();
-    this.shuffleDeck(this.commonDeck);
-    console.log('Deck created and shuffled');
-    this.dealCards();
-  }
+  private initializeGame() {
+    const hands = this.deckService.prepareNewGame();
+    // TODO: Backend determines who gets dealt first
+    //          - also determined by type of game
 
+    this.povHand = hands[0];
+    this.oppHand = hands[1];
 
-  // ---- ---- ---- ---- \\
-  //   Public  Methods   \\
-  // ---- ---- ---- ---- \\
+    this.povPlayingCards = hands[0].cards;
+    this.oppPlayingCards = hands[1].cards;
 
-  // ['♡', '♢', '♧', '♤']
-
-
-  public selectCard(card: Card): void {
-    this.battlefields.get(1)?.addCard(card);
-    this.playerHand = this.playerHand.filter(c => c !== card);
-    
-  }
-
-  hoverCard(htmlCard: HTMLElement, card: Card): void {
-    console.log(`Hovering over card: ${card.rank} of ${card.suit}`);
-
-    htmlCard.addEventListener('mouseenter', () => {
-      htmlCard.style.setProperty('background-color', this.getSuitHighlight(card));
-    })
-    htmlCard.addEventListener('mouseleave', () => {
-      htmlCard.style.setProperty('background-color', 'transparent');
-    })
+    this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
+    this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
   }
 
 
-  applyStyles(htmlCard: HTMLElement, card: Card, idx: number, count: number): object {
+//    ╭───────────────────╮
+//    │  Public  Methods  │
+//    ╰───────────────────╯
+
+
+  applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty
-    this.hoverCard(htmlCard, card)
+    this.animationStation.applyCardHoverHighlight(htmlCard, card)
 
     return {
       // ...this.getSuitHighlight(card),
-      ...this.getArcStyle(idx, count)
+      ...this.animationStation.getHandArcStyleVars(idx, count)
     };
-  } 
-
-
-  // TODO: fix this fucking monstrosity
-  getSuitHighlight(card: Card): string {
-    switch(card.suit) {
-      case '♡' :
-        return '#9b111f55' 
-      case '♢' :
-        return '#28c8d455' 
-      case '♧' :
-        return '#3aa04255' 
-      case '♤' :
-        return '#392bd655' 
-    }
-
-    return '';
   }
 
-
-  // ---- ---- ---- ---- \\
-  //  Private   Methods  \\
-  // ---- ---- ---- ---- \\
-
-
-  /**
-   * Creates a standard deck of cards with 52 unique cards.
-   * Each card has a suit and a rank.
-   * @returns An array of Card objects representing the deck.
-   */
-  private createDeck(): Card[] {
-    const suits = ['♡', '♢', '♧', '♤'];
-    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-    const deck: Card[] = [];
-
-    for (const suit of suits) {
-      for (const rank of ranks) {
-        deck.push({ suit, rank });
-      }
-    }
-    return deck;
-  }
-
-
-  /**
-   * Creates a Euchre deck with 24 unique cards.
-   * Each card has a suit and a rank.
-   * @returns An array of Card objects representing the Euchre deck.
-   */
-  // private createEuchreDeck(): Card[] {
-  //   const suits = ['♡', '♢', '♧', '♤'];
-  //   const ranks = ['9', '10', 'J', 'Q', 'K', 'A'];
-  //   const deck: Card[] = [];
-
-  //   for (const suit of suits) {
-  //     for (const rank of ranks) {
-  //       deck.push({ suit, rank });
-  //     }
-  //   }
-  //   return deck;
+  // Saving for later
+  // public getPlayerType(): string {
+  //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
   // }
-
-
-  /**
-   * Shuffles the deck of cards using the Fisher-Yates algorithm.
-   * @param deck The array of Card objects to shuffle.
-   */
-  private shuffleDeck(deck: Card[]): void {
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
-  }
-
-  /**
-   * Deals cards to the player and opponent.
-   * The player receives the first 5 cards, and the opponent receives the next 5 cards.
-   * The remaining cards are left in the common deck.
-   */
-  private dealCards(): void {
-    // TODO: Implement sequential shuffling options
-    this.playerHand = this.commonDeck.slice(0, 5);
-    this.oppHand = this.commonDeck.slice(6, 10);
-    this.commonDeck = this.commonDeck.slice(10);
-  }
-
-
-
-  // ---- ---- ---- ---- \\
-  //  Complicated  Shit  \\
-  // ---- ---- ---- ---- \\
-
-
-  getArcStyle(idx: number, count: number): object {
-
-    if (count <= 1) 
-    {
-      return {};
-    }
-    else if (count % 2 === 1 && idx === Math.floor(count / 2)) {
-      return {
-        '--transform': 'translateY(1.5em)',
-        '--rotation': '0deg',
-      };
-    }
-
-    // ---- \\
-    
-    const midVal = count % 2 === 0 ? (count - 1)/2 : Math.floor(count / 2);
-
-    const transform = `translateY(${Math.abs(idx - midVal)/1.2 * 3}em)`;
-    const rotation = `${((idx - midVal) * 40)/count}deg`
-
-    return {
-      '--transform': transform,
-      '--rotation': rotation,
-    };
-  }
 }
