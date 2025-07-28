@@ -1,5 +1,5 @@
 // battlefield.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';

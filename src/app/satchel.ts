@@ -1,9 +1,6 @@
 // Stephen's Bag of Holding
 //   ft. a deck of many things
 
-import { Input } from '@angular/core';
-
-import { Card } from "./card/card";
 import { PigeonDestination } from "./enum";
 
 

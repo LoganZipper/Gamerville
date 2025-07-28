@@ -1,6 +1,5 @@
 import { AnimationStation } from './../animation-station';
 import { Component, Input } from '@angular/core';
-import { DeckType } from '../enum';
 import { CommonModule } from '@angular/common';
 import { PlayingCard } from '../satchel';
 import { CardFace } from "../card-face/card-face";
@@ -12,6 +11,12 @@ import { CardFace } from "../card-face/card-face";
   styleUrl: './card.scss'
 })
 export class Card {
+
+
+  //    ╭───────────────╮
+  //    │  Data Fields  │
+  //    ╰───────────────╯
+
   @Input() card!: Card;
   @Input() playingCard!: PlayingCard;
   // @Input() styles: object = {};
@@ -19,30 +24,20 @@ export class Card {
   @Input() positionInfo!: { i: number, c: number };
   @Input() isPlayer: boolean = false;
 
-  //    ╭───────────────╮
-  //    │  Data Fields  │
-  //    ╰───────────────╯
-
 
 
   //    ╭────────────────╮
   //    │  Construction  │
   //    ╰────────────────╯
 
-
   constructor(private animationStation: AnimationStation) {
   }
-
-
-
-//    ╭───────────────────╮
-//    │  Event Listeners  │
-//    ╰───────────────────╯
 
 
   //    ╭────────────────╮
   //    │  Visual Setup  │
   //    ╰────────────────╯
+
 
   public applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     if(!this.isPlayer) return {};
@@ -55,6 +50,4 @@ export class Card {
       ...this.animationStation.getHandArcStyleVars(idx, count)
     };
   }
-
-
 }

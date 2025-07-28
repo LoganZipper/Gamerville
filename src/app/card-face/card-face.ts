@@ -10,6 +10,5 @@ import { PlayingCard } from '../satchel';
 export class CardFace {
 
   @Input() playingCard!: PlayingCard;
-  // @Input() isPlayer: boolean = false;
 
 }

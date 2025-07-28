@@ -1,8 +1,7 @@
 // test-game.ts
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { HandContainer, PlayingCard } from '../satchel';
-import { Card } from '../card/card';
 import { BattlefieldComponent } from "../battlefield/battlefield";
 import { BattleService } from '../battle-service';
 import { Subscription } from 'rxjs';
@@ -52,9 +51,9 @@ constructor(
 
 
 
-  //    ╭────────────────────╮
-  //    │    Core  Methods   │
-  //    ╰────────────────────╯
+  //    ╭───────────────────╮
+  //    │   Core  Methods   │
+  //    ╰───────────────────╯
 
 
   ngOnInit() {
@@ -87,9 +86,9 @@ constructor(
   }
 
 
-//    ╭──────────────────╮
-//    │  Public Methods  │
-//    ╰──────────────────╯
+//    ╭───────────────────╮
+//    │  Public  Methods  │
+//    ╰───────────────────╯
 
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
@@ -102,6 +101,7 @@ constructor(
     };
   }
 
+  // Saving for later
   // public getPlayerType(): string {
   //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
   // }

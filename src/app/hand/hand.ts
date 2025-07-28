@@ -1,4 +1,4 @@
-import { PigeonDestination, PlayerType } from './../enum';
+import { PlayerType } from './../enum';
 import { BattleService } from './../battle-service';
 import { AnimationStation } from './../animation-station';
 import { ChangeDetectorRef, Component, Input } from '@angular/core';

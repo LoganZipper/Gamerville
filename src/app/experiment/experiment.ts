@@ -8,15 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './experiment.scss'
 })
 export class ExperimentComponent {
-  // ---- ---- ---- ---- \\
-  //      Properties     \\
-  // ---- ---- ---- ---- \\
-
-
-  // ---- ---- ---- ---- \\
-  //    Core   Methods   \\
-  // ---- ---- ---- ---- \\
-
   constructor() {}
 
   ngOnInit() {}
