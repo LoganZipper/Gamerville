@@ -6,13 +6,20 @@
 
 <div id="navigation">
     <nav class="nav">
-        <a class="nav-item card" href="/home" routerLink="/home">Home</a>
-        <a class="nav-item card" href="/cribbage" routerLink="/cribbage">Cribbage</a>
-        <a class="nav-item card" href="/euchre" routerLink="/euchre">Euchre</a>
-        <a class="nav-item card" href="/chess" routerLink="/chess">¯\_(ツ)_/¯</a>
-        <a class="nav-item card" href="/deal" routerLink="/deal">Deal</a>
+        <a class="nav-item card" (click)="setCurrentGame('test-game')">Home</a>
+        <a class="nav-item card" (click)="setCurrentGame('cribbage')">Cribbage</a>
+        <a class="nav-item card" (click)="setCurrentGame('euchre')">Euchre</a>
+        <a class="nav-item card" (click)="setCurrentGame('experiment')">¯\_(ツ)_/¯</a>
+        <a class="nav-item card" (click)="setCurrentGame('deal')">MonoDeal</a>
     </nav>
 </div>
 
 
 
+<div *ngIf="false">
+  <!-- <a class="nav-item card" href="/home" routerLink="/home">Home</a>
+        <a class="nav-item card" href="/cribbage" routerLink="/cribbage">Cribbage</a>
+        <a class="nav-item card" href="/euchre" routerLink="/euchre">Euchre</a>
+        <a class="nav-item card" href="/chess" routerLink="/chess">¯\_(ツ)_/¯</a>
+        <a class="nav-item card" href="/deal" routerLink="/deal">Deal</a> -->
+</div>

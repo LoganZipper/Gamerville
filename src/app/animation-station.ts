@@ -12,6 +12,8 @@ export class AnimationStation {
   private color_club: string = '#3aa04255'
   private color_spade: string = '#392bd655'
 
+  private color_highlight: string = '#e0c91cba'
+
 
 
 //    ╭───────────────────╮
@@ -23,16 +25,16 @@ export class AnimationStation {
   public getSuitHighlight(card: PlayingCard): string {
     switch(card?.suit) {
       case '♡' :
-        return '#9b111f55'
+        return this.color_heart
       case '♢' :
-        return '#28c8d455'
+        return this.color_diamond
       case '♧' :
-        return '#3aa04255'
+        return this.color_club
       case '♤' :
-        return '#392bd655'
+        return this.color_spade
     }
 
-    return '';
+    return this.color_highlight;
   }
 
 
@@ -53,7 +55,6 @@ export class AnimationStation {
       htmlCard.style.setProperty('background-color', 'transparent');
     })
   }
-
 
 
 

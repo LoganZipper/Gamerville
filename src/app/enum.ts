@@ -22,3 +22,12 @@ export enum PlayerType {
   Opponent = 'opponent',
 }
 
+
+export enum Game {
+  Home = 'test-game',
+  Euchre = 'euchre',
+  Experiment = 'experiment',
+  Cribbage = 'cribbage',
+  MonoDeal = 'deal',
+}
+

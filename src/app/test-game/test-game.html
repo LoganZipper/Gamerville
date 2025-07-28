@@ -11,7 +11,13 @@
       [playerType]="oppType"
       [handInfo]="oppPlayingCards"></app-hand>
   </div>
-  <div class="line"></div>
+
+  <div ng-if="false">
+    <!-- <app-battlefield></app-battlefield> -->
+    <!-- <div class="line"></div> -->
+  </div>
+
+  <app-scoreboard></app-scoreboard>
   <div id="player">
     <app-battlefield></app-battlefield>
     <app-hand

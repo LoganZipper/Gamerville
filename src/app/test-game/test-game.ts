@@ -9,10 +9,11 @@ import { DeckService } from '../deck-service';
 import { AnimationStation } from '../animation-station';
 import { PigeonDestination, PlayerType } from '../enum';
 import { Hand } from '../hand/hand';
+import { Scoreboard } from '../scoreboard/scoreboard';
 
 @Component({
   selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent, Hand],
+  imports: [CommonModule, BattlefieldComponent, Hand, Scoreboard],
   templateUrl: './test-game.html',
   styleUrls: ['./test-game.scss']
 })

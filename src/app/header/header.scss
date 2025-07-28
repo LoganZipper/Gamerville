@@ -17,6 +17,8 @@
     );
     padding: 20px;
     box-shadow: 40px 4px 4px rgba(0,0,0,0.1);
+
+    user-select: none;
 }
 
 #navigation .card {
@@ -30,6 +32,8 @@
     padding: 1em 0;
     width: 8em !important;;
     margin: auto 1em;
+
+    cursor: pointer;
 }
 
 .nav-item {
