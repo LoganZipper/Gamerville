@@ -3,7 +3,7 @@
 // Very basic
 const Express = require('express')();
 const Http = require('http').Server(Express);
-const SocketIO = require('socket.io')(Http);
+const io = require('socket.io')(Http);
 const User = require('./functions/user');
 
 // Suits = ['♡', '♢', '♧', '♤'];
@@ -22,21 +22,15 @@ var cards = [
   {rank: '5', suit: '♤'},
 ]
 
-//
-const ids = []
-
-
-
-
-
 
 //TODO: make enum
-SocketIO.on('connection', (socket) => {
-  socket.emit('cards', cards)
+io.on('connection', (socket) => {
+  console.log('AN ID IS BEING SENT WITH AN ID:', User.generateID())
+  socket.emit('generate', '1000')
 })
 
-SocketIO.on('generate', (socket) => {
-  socket.emit('id', User.generateID())
+io.on('disconnect', () => {
+  console.log('client disconnected')
 })
 
 Http.listen(3000, () => {

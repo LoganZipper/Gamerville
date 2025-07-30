@@ -24,11 +24,10 @@ export class MainComponent {
   // public playGameFlag: boolean = true;
 
   public selectedGame: Game = Game.Home;
-
+  public id!: number;
 
   //Multi
 
-  private context: any;
   private socket: any;
 
   //    ╭─────────────────╮
@@ -40,10 +39,20 @@ export class MainComponent {
   }
 
   ngAfterViewInit() {
-    this.socket.on()
-    this.socket.on('cards', (cards: any) => {
-      console.log('success')
-    })
+    console.log('ngAfterViewInit')
+    this.socket.on('generate', (id: number) => {
+      console.log('my id:', id)
+      this.id = id;
+    });
+  }
+
+   constructor(private gameService: GameService) {
+    this.pigeonGamer$ = this.gameService.gamePigeon$.subscribe((gamePigeon) => {
+      this.selectedGame = gamePigeon.game;
+    });
+
+    console.log('Saved id?');
+    console.log(this.id);
   }
 
   // Use this in games
@@ -51,12 +60,7 @@ export class MainComponent {
     this.socket.emit('card', card)
   }
 
-
-  // I think server logic should be handled here
-
-  constructor(private gameService: GameService) {
-    this.pigeonGamer$ = this.gameService.gamePigeon$.subscribe((gamePigeon) => {
-      this.selectedGame = gamePigeon.game;
-    });
+  public getID() {
+    return this.id || '0000';
   }
 }
