@@ -3,7 +3,13 @@
 .scoreboard {
   font-size: 2rem;
   color: whitesmoke;
-  background-color: #111;
+  // background-color: #111;
+  background:
+    radial-gradient(ellipse at bottom right, #17171744),
+    radial-gradient(ellipse at top left, #15151588),
+    radial-gradient(ellipse at center, #111111),
+        ;
+
   padding: 10px;
   margin: 4rem;
   border-radius: 5px;
@@ -30,23 +36,22 @@
 
 .score {
   font-weight: bold;
-  color: #c4c42b;
-  background: linear-gradient(
-    90deg,
-    #b8b8b888 0%,
-    #e0e0e088 20%,
-    #f5f5f588 40%,
-    #cccccc88 60%,
-    #a0a0a088 80%,
-    #e0e0e088 100%
-  );
+  color: whitesmoke;
+  background-color: whitesmoke;
+  // background: linear-gradient(
+  //   180deg,
+  //   #dddddd88 0%,
+  //   #ffffff88 20%,
+  //   #eeeeee88 40%,
+  //   #dddddd88 100%
+  // );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow:
-    1px 1px 2px #ada119bb,
-    0 0 5px #ffffff7b,
-    0 0 2px #bbbbbb93;
+    0 0 1px #111111cc,
+    0 0 3px #ffffff22;
+
 }
 
 

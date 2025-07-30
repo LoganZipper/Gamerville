@@ -13,10 +13,6 @@ export class GameService {
   //    ╰────────────────╯
 
   public gamePigeon$ = new Subject<GamePigeon>();
-  // private selectedGame: Game = Game.Home;
-
-
-
 
   //    ╭────────────────────╮
   //    │   Public Methods   │
