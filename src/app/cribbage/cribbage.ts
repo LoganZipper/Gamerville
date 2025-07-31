@@ -1,23 +1,28 @@
 // test-game.ts
+
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { HandContainer, PlayingCard } from '../satchel';
-import { BattlefieldComponent } from "../battlefield/battlefield";
-import { BattleService } from '../battle-service';
-import { Subscription } from 'rxjs';
-import { DeckService } from '../deck-service';
-import { AnimationStation } from '../animation-station';
-import { PigeonDestination, PlayerType } from '../enum';
+import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Hand } from '../hand/hand';
 import { Scoreboard } from '../scoreboard/scoreboard';
+import { BattlefieldComponent } from '../battlefield/battlefield';
+import { BattleService } from '../battle-service';
+import { DeckService } from '../deck-service';
+import { AnimationStation } from '../animation-station';
+import { Subscription } from 'rxjs';
+import { HandContainer, PlayingCard } from '../satchel';
+import { DeckType, PigeonDestination, PlayerType } from '../enum';
 
 @Component({
-  selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent, Hand, Scoreboard],
-  templateUrl: './test-game.html',
-  styleUrls: ['./test-game.scss']
+  selector: 'app-cribbage',
+  imports: [CommonModule, Hand, Scoreboard, BattlefieldComponent],
+  templateUrl: './cribbage.html',
+  styleUrl: './cribbage.scss'
 })
-export class TestGameComponent implements OnInit {
+export class Cribbage {
+
+
+///////
+//
 
 constructor(
   private battleService: BattleService,
@@ -58,6 +63,7 @@ constructor(
 
 
   ngOnInit() {
+
     this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
      this.initializeGame();
   }
@@ -72,9 +78,12 @@ constructor(
   }
 
   private initializeGame() {
+    this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
     const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
+
+    console.log('Hands:', hands);
 
     this.povHand = hands[0];
     this.oppHand = hands[1];
@@ -91,10 +100,6 @@ constructor(
 //    │  Public  Methods  │
 //    ╰───────────────────╯
 
-  public keepScore() {
-    // return {[(this.id ?? 'p001')]: 0, 'p002': 0};
-  }
-
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty
@@ -105,9 +110,4 @@ constructor(
       ...this.animationStation.getHandArcStyleVars(idx, count)
     };
   }
-
-  // Saving for later
-  // public getPlayerType(): string {
-  //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
-  // }
 }

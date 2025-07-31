@@ -1,7 +1,7 @@
 // Stephen's Bag of Holding
 //   ft. a deck of many things
 
-import { PigeonDestination } from "./enum";
+import { Game, PigeonDestination } from "./enum";
 
 
 //    ╭───────────────╮
@@ -12,6 +12,8 @@ export const Suits = ['♡', '♢', '♧', '♤'];
 export const Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 export const EuchreRanks = ['9', '10', 'J', 'Q', 'K', 'A'];
 export const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+export const THIS_IS_A_COMMENT = false;
 
 
 
@@ -57,9 +59,10 @@ export class Pigeon {
     destination!: PigeonDestination;
     id?: number; // Optional ID for card tracking
 
-    constructor(card: PlayingCard, destination: PigeonDestination) {
+    constructor(card: PlayingCard, destination: PigeonDestination, id?: number) {
         this.card = card;
         this.destination = destination;
+        this.id = id;
     }
 }
 
@@ -73,6 +76,17 @@ export class UltraPigeon {
     constructor(cards: PlayingCard[], destination: PigeonDestination) {
         this.cards = cards;
         this.destination = destination;
+    }
+}
+
+export class GamePigeon {
+//    ╭───────────────╮
+//    │  Data Fields  │
+//    ╰───────────────╯
+    game!: Game;
+
+    constructor(game: Game) {
+        this.game = game;
     }
 }
 

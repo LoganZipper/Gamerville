@@ -18,14 +18,14 @@ export class BattleService {
   }
 
   public sendCardToPlayer(card: PlayingCard): void {
-    this.carrierPigeon$.next({ card, destination: PigeonDestination.POV });
+    this.carrierPigeon$.next(new Pigeon(card, PigeonDestination.POV));
   }
 
   public sendCardToBattlefield(card: PlayingCard, id?: number): void {
-    this.carrierPigeon$.next({ card, id, destination: PigeonDestination.Battlefield });
+    this.carrierPigeon$.next(new Pigeon(card, PigeonDestination.Battlefield, id));
   }
 
   public sendHandToPlayer(cards: PlayingCard[], destination: PigeonDestination): void {
-    this.ultraPigeon$.next({ cards, destination });
+    this.ultraPigeon$.next(new UltraPigeon(cards, destination));
   }
 }

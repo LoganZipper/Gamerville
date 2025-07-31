@@ -4,6 +4,7 @@ import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
 import { BattleService } from '../battle-service';
 import { PigeonDestination } from '../enum';
+import { THIS_IS_A_COMMENT } from '../satchel';
 
 @Component({
   selector: 'app-battlefield',
@@ -21,6 +22,9 @@ export class BattlefieldComponent {
 
   // private sub!: Subscription;
   private pigeonScout: any;
+
+  // Goofy
+  THIS_IS_A_COMMENT = THIS_IS_A_COMMENT;
 
   constructor(private battleService: BattleService) {
   }

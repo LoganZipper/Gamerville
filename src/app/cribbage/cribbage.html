@@ -4,17 +4,12 @@
             selecting cards as well as simply hovering over them.
      It doesn't need to look good. It just needs to be serviceable. -->
 
-<div class="test-game">
+<div class="cribbage">
   <div id="opponent">
     <app-hand
       #oppRef
       [playerType]="oppType"
       [handInfo]="oppPlayingCards"></app-hand>
-  </div>
-
-  <div ng-if="false">
-    <!-- <app-battlefield></app-battlefield> -->
-    <!-- <div class="line"></div> -->
   </div>
 
   <app-scoreboard></app-scoreboard>
