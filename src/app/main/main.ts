@@ -31,22 +31,14 @@ export class MainComponent {
 
   private socket: any;
 
+
+
   //    ╭─────────────────╮
   //    │   Constructor   │
   //    ╰─────────────────╯
 
-
-
-
-ngOnInit() {
-    // No socket logic here
-}
-
-
-  ngAfterViewInit() {
-    console.log('ngAfterViewInit')
-  }
-
+  // Heavy socket logic
+  // Ideally, main basically exists as a gateway to the rest of the app
 
    constructor (
     private gameService: GameService,
@@ -56,7 +48,8 @@ ngOnInit() {
     this.pigeonGamer$ = this.gameService.gamePigeon$.subscribe((gamePigeon) => {
       this.selectedGame = gamePigeon.game;
     });
-
+    // Initialize socket/server connection
+    // Assign id and refresh view
     this.socket = io('http://localhost:3000');
     this.socket.on('generate', (id: string) => {
       this.zone.run(() => {

@@ -93,15 +93,15 @@ const duffle = require('../duffle'); // Adjust path as needed
 
   /**
    * Shuffles the deck of cards using the Fisher-Yates algorithm.
+   * (foreach card -> swap with random card)
    * @param deck The array of Card objects to shuffle.
    */
   function shuffleDeck(deck) {
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-    }
+    deck.forEach((_card, index) => {
+      const randomIndex = Math.floor(Math.random() * deck.length);
+      [deck[index], deck[randomIndex]] = [deck[randomIndex], deck[index]];
+    });
   }
-
 
 
   //    ╭───────────────────────────╮
@@ -128,6 +128,11 @@ const duffle = require('../duffle'); // Adjust path as needed
   //    │  Prepare New Game  │
   //    ╰────────────────────╯
 
+  /**
+  |* Generates deck
+  |* Shuffles deck
+  |* Deals cards
+  |**/
   function prepareNewGame() {
     this.commonDeck = this.generateDeck();
     this.shuffleDeck(this.commonDeck);

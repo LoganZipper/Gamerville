@@ -18,24 +18,23 @@ app.use(express.json());
 
 // Suits = ['♡', '♢', '♧', '♤'];
 
+// class Card {
+//   rank
+//   suit
+// }
 
-class Card {
-  rank
-  suit
-}
-
-var cards = [
-  {rank: 'A', suit: '♤'},
-  {rank: '2', suit: '♤'},
-  {rank: '3', suit: '♤'},
-  {rank: '4', suit: '♤'},
-  {rank: '5', suit: '♤'},
-]
+// var cards = [
+//   {rank: 'A', suit: '♤'},
+//   {rank: '2', suit: '♤'},
+//   {rank: '3', suit: '♤'},
+//   {rank: '4', suit: '♤'},
+//   {rank: '5', suit: '♤'},
+// ]
 
 
 //TODO: make enum
 io.on('connection', (socket) => {
-  console.log('AN ID IS BEING SENT WITH AN ID:', User.generateID())
+  console.log('Sending id:', User.generateID())
   socket.emit('generate', User.generateID());
 })
 
