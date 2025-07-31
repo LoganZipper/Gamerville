@@ -1,10 +1,20 @@
 // app.js
 
 // Very basic
-const Express = require('express')();
-const Http = require('http').Server(Express);
-const io = require('socket.io')(Http);
 const User = require('./functions/user');
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
+  cors: {
+    origin: "http://localhost:4200", // or your frontend URL
+    methods: ["GET", "POST"]
+  }
+});
+const cors = require('cors');
+
+app.use(cors());
+app.use(express.json());
 
 // Suits = ['♡', '♢', '♧', '♤'];
 
@@ -26,13 +36,13 @@ var cards = [
 //TODO: make enum
 io.on('connection', (socket) => {
   console.log('AN ID IS BEING SENT WITH AN ID:', User.generateID())
-  socket.emit('generate', '1000')
+  socket.emit('generate', User.generateID());
 })
 
 io.on('disconnect', () => {
   console.log('client disconnected')
 })
 
-Http.listen(3000, () => {
+http.listen(3000, () => {
   console.log('Server is active baby! Port is 3000')
 })

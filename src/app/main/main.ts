@@ -1,15 +1,16 @@
 import { GameService } from './../game-service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { TestGameComponent } from "../test-game/test-game";
 import { Subscription } from 'rxjs';
 import { Game } from '../enum';
 import { io } from 'socket.io-client';
 import { Card } from '../card/card';
+import { Cribbage } from "../cribbage/cribbage";
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, TestGameComponent],
+  imports: [CommonModule, TestGameComponent, Cribbage],
   templateUrl: './main.html',
   styleUrl: './main.scss'
 })
@@ -24,7 +25,7 @@ export class MainComponent {
   // public playGameFlag: boolean = true;
 
   public selectedGame: Game = Game.Home;
-  public id!: number;
+  public id: string | undefined; // No default, will be set by server
 
   //Multi
 
@@ -34,25 +35,35 @@ export class MainComponent {
   //    │   Constructor   │
   //    ╰─────────────────╯
 
-  ngOnInit() {
-    this.socket = io('http://localhost:3000')
-  }
+
+
+
+ngOnInit() {
+    // No socket logic here
+}
+
 
   ngAfterViewInit() {
     console.log('ngAfterViewInit')
-    this.socket.on('generate', (id: number) => {
-      console.log('my id:', id)
-      this.id = id;
-    });
   }
 
-   constructor(private gameService: GameService) {
+
+   constructor (
+    private gameService: GameService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
     this.pigeonGamer$ = this.gameService.gamePigeon$.subscribe((gamePigeon) => {
       this.selectedGame = gamePigeon.game;
     });
 
-    console.log('Saved id?');
-    console.log(this.id);
+    this.socket = io('http://localhost:3000');
+    this.socket.on('generate', (id: string) => {
+      this.zone.run(() => {
+        this.id = id;
+        this.cdr.markForCheck();
+      });
+    });
   }
 
   // Use this in games
@@ -60,7 +71,4 @@ export class MainComponent {
     this.socket.emit('card', card)
   }
 
-  public getID() {
-    return this.id || '0000';
-  }
 }

@@ -10,7 +10,7 @@ import { DeckService } from '../deck-service';
 import { AnimationStation } from '../animation-station';
 import { Subscription } from 'rxjs';
 import { HandContainer, PlayingCard } from '../satchel';
-import { PigeonDestination, PlayerType } from '../enum';
+import { DeckType, PigeonDestination, PlayerType } from '../enum';
 
 @Component({
   selector: 'app-cribbage',
@@ -78,9 +78,12 @@ constructor(
   }
 
   private initializeGame() {
+    this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
     const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
+
+    console.log('Hands:', hands);
 
     this.povHand = hands[0];
     this.oppHand = hands[1];

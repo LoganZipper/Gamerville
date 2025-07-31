@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-scoreboard',
@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './scoreboard.scss'
 })
 export class Scoreboard {
+  @Input() scores: { [key: string]: number } = {};
 
   // Logic for swapping scoreboard?
   //    probably can iterate over player count and add.

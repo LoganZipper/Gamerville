@@ -91,6 +91,10 @@ constructor(
 //    │  Public  Methods  │
 //    ╰───────────────────╯
 
+  public keepScore() {
+    // return {[(this.id ?? 'p001')]: 0, 'p002': 0};
+  }
+
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty

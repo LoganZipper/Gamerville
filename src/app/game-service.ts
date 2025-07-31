@@ -12,6 +12,10 @@ export class GameService {
   //    │   Properties   │
   //    ╰────────────────╯
 
+  private povID: string | undefined;
+  private oppID: string[] | undefined;
+
+
   public gamePigeon$ = new Subject<GamePigeon>();
 
   //    ╭────────────────────╮
@@ -20,5 +24,9 @@ export class GameService {
 
   public setGame(game: Game): void {
     this.gamePigeon$.next(new GamePigeon(game));
+  }
+
+  public setPovID(id: string): void {
+    this.povID = id;
   }
 }

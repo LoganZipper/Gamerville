@@ -7,3 +7,8 @@ html, body {
     box-sizing: border-box;
     overflow-x: hidden;
 }
+
+main {
+  margin-top: 5em;
+  height: calc(100vh - 25em);
+}
