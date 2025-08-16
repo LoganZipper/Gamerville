@@ -93,6 +93,17 @@ constructor(
 
     this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
     this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
+
+  }
+
+  private game(): void {
+    // wait for opponent if their turn
+
+
+    // await player action
+    // player ends turn | progresses turn step
+
+    // placeholder for auto-score
   }
 
 
