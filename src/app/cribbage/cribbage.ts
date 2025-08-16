@@ -35,10 +35,12 @@ constructor(
 
   // Game State
   private fuze$!: Subscription;
+  private turn$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
 
   // Shared Entities
   public commonDeck: PlayingCard[] = [];
+  public playerTurn: PlayerType = PlayerType.Opponent; // Ensure controls are locked
 
   // Player Entities
   @ViewChild('povRef') povHand!: HandContainer;
@@ -63,13 +65,14 @@ constructor(
 
 
   ngOnInit() {
-
+    // this.
     this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
      this.initializeGame();
   }
 
   ngAfterViewInit() {
-
+    // TODO:
+    // this.turn$ = this.battleService.something$.subscribe((object) => this.povHand.cards.push(object.card));
     // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
   }
 

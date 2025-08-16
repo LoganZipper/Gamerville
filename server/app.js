@@ -1,5 +1,12 @@
 // app.js
 
+// Server Startup Instructions:
+// 1. Install dependencies: npm install
+// 2. Start the server: node app.js
+//
+// Client Connection Instructions:
+// 1. Connect to the server from the client-side using [Gamerville -> npm run start]
+
 // Very basic
 const User = require('./functions/user');
 const express = require('express');
