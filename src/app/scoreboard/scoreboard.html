@@ -1,6 +1,12 @@
-<div id="scoreboard" class="scoreboard">
+<div ngIf="game === test-game" id="scoreboard" class="scoreboard">
     <span class="score">1</span>
     <div class="divider"></div>
     <span class="score">0</span>
 </div>
+
+
+<app-cribbage-scoreboard ngIf="game === cribbage"></app-cribbage-scoreboard>
+
+
+
 <div class="line"></div>

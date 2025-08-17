@@ -1,7 +1,7 @@
 // battle-service.ts
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { PlayingCard, Pigeon, UltraPigeon } from './satchel';
+import { PlayingCard, Pigeon, UltraPigeon, GameState } from './satchel';
 import { PigeonDestination } from './enum';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { PigeonDestination } from './enum';
 })
 export class BattleService {
   public reset$ = new Subject<void>();
+  public gamestate$ = new Subject<GameState>();
   public carrierPigeon$ = new Subject<Pigeon>();
   public ultraPigeon$ = new Subject<UltraPigeon>();
 

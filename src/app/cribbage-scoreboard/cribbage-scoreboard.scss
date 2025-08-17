@@ -1,0 +1,22 @@
+outerEdge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 1px solid whitesmoke;
+}
+
+.opponent,
+.player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    width: 2px;
+    height: 2px;
+    border-radius: 100%;
+    background-color: gray;
+    margin: auto;
+}

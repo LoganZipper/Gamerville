@@ -9,12 +9,13 @@ import { BattleService } from '../battle-service';
 import { DeckService } from '../deck-service';
 import { AnimationStation } from '../animation-station';
 import { Subscription } from 'rxjs';
-import { HandContainer, PlayingCard } from '../satchel';
-import { DeckType, PigeonDestination, PlayerType } from '../enum';
+import { GameState, HandContainer, PlayingCard } from '../satchel';
+import { DeckType, Game, PigeonDestination, PlayerType } from '../enum';
+import { CribbageScoreboard } from "../cribbage-scoreboard/cribbage-scoreboard";
 
 @Component({
   selector: 'app-cribbage',
-  imports: [CommonModule, Hand, Scoreboard, BattlefieldComponent],
+  imports: [CommonModule, Hand, Scoreboard, BattlefieldComponent, CribbageScoreboard],
   templateUrl: './cribbage.html',
   styleUrl: './cribbage.scss'
 })
@@ -38,6 +39,8 @@ constructor(
   private turn$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
 
+  private gameState!: GameState;
+
   // Shared Entities
   public commonDeck: PlayingCard[] = [];
   public playerTurn: PlayerType = PlayerType.Opponent; // Ensure controls are locked
@@ -53,6 +56,7 @@ constructor(
   public povType: PlayerType = PlayerType.POV;
   public oppType: PlayerType = PlayerType.Opponent;
 
+  public fuckThisBullshit: Game = Game.Cribbage;
 
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
@@ -72,7 +76,7 @@ constructor(
 
   ngAfterViewInit() {
     // TODO:
-    // this.turn$ = this.battleService.something$.subscribe((object) => this.povHand.cards.push(object.card));
+    this.turn$ = this.battleService.gamestate$.subscribe((gamestate) => this.gameState = gamestate);
     // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
   }
 

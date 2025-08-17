@@ -65,6 +65,34 @@ export class PlayingCard {
 }
 
 
+//    ╭──────────────────╮
+//    │  PIGEON   CLASS  │
+//    ╰──────────────────╯
+
+export class GameState {
+    players: string[];
+    currentPlayerIndex: number;
+
+    constructor(players: string[]) {
+        this.players = players;
+        this.currentPlayerIndex = 0;
+    }
+}
+
+
+export class CribbageGamestate extends GameState {
+    hand: PlayingCard[];
+    crib: PlayingCard[];
+    score: number;
+
+    constructor(players: string[]) {
+        super(players);
+        this.crib = [];
+        this.hand = [];
+        this.score = 0;
+    }
+}
+
 
 //    ╭──────────────────╮
 //    │  PIGEON   CLASS  │

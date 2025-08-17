@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DeckType } from './enum';
+import { DeckType, Game } from './enum';
 import { PlayingCard, HandContainer, Suits, Ranks } from './satchel';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class DeckService {
   //    │  Data Fields  │
   //    ╰───────────────╯
 
-
+  public selectedGame: Game = Game.Home; // Default game type
   public selectedDeck: DeckType = DeckType.Standard; // Default deck type
   public commonDeck: PlayingCard[] = []; // The deck that is shared among players
 
@@ -119,11 +119,29 @@ export class DeckService {
   |**/
   private dealCards(): HandContainer[] {
     const hands: HandContainer[] = [];
-    // TODO: Implement sequential shuffling options
-    const playerHand = new HandContainer(this.commonDeck.slice(0, 5));
-    const oppHand = new HandContainer(this.commonDeck.slice(5, 10));
+    const playerHand = new HandContainer();
+    const oppHand = new HandContainer();
+    let handReduction = 0;
+    
+    switch(this.selectedGame) {
+      case Game.Cribbage: 
+        playerHand.cards = this.commonDeck.slice(0, 6);
+        oppHand.cards = this.commonDeck.slice(6, 12);
+        handReduction = 12;
+        break;
+      case Game.Euchre: 
+        playerHand.cards = this.commonDeck.slice(0, 6);
+        oppHand.cards = this.commonDeck.slice(6, 12);
+        handReduction = 12;
+        break;
+      default:
+        playerHand.cards = this.commonDeck.slice(0, 6);
+        oppHand.cards = this.commonDeck.slice(6, 12);
+        handReduction = 12;
+    }
+
     hands.push(playerHand, oppHand);
-    this.commonDeck = this.commonDeck.slice(10);
+    this.commonDeck = this.commonDeck.slice(handReduction);
     return hands;
   }
 

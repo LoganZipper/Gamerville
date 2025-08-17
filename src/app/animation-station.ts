@@ -21,7 +21,6 @@ export class AnimationStation {
 //    ╰───────────────────╯
 
 
-  // TODO: fix this fucking monstrosity
   public getSuitHighlight(card: PlayingCard): string {
     switch(card?.suit) {
       case '♡' :

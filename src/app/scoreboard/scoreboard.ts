@@ -1,18 +1,20 @@
 import { Component, Input } from '@angular/core';
+import { Game } from '../enum';
+import { CribbageScoreboard } from "../cribbage-scoreboard/cribbage-scoreboard";
 
 @Component({
   selector: 'app-scoreboard',
-  imports: [],
+  imports: [CribbageScoreboard],
   templateUrl: './scoreboard.html',
   styleUrl: './scoreboard.scss'
 })
 export class Scoreboard {
-  @Input() scores: { [key: string]: number } = {};
+  // @Input() scores: { [key: string]: number } = {};
+  @Input() game: Game = Game.Home; // Default game type
 
   // Logic for swapping scoreboard?
   //    probably can iterate over player count and add.
 
-  // TODO: Preferences for layout later on
 
   // TODO: Allow manual incrementing of score.
   //        - games will always allow auto-scorekeeping.
@@ -21,9 +23,12 @@ export class Scoreboard {
 
 
 
+
+
 //    ╭────────────────╮
 //    │  Visual Setup  │
 //    ╰────────────────╯
+
 
 
 }
