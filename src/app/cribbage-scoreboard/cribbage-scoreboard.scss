@@ -1,22 +1,56 @@
-outerEdge {
+.outerEdge {
     display: flex;
     flex-direction: column;
     align-items: center;
 
+    margin: 2em auto;
+    padding: 1em;
+    width: fit-content;
+    min-width: 10em;
+
     border: 1px solid whitesmoke;
+    border-radius: 1em;
+    background-color: #111;
 }
 
-.opponent,
-.player {
+#opponentRow,
+#playerRow {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+
+    margin: .25em auto;
+    padding: .5em;
+
+    margin-top: 0;
 }
 
 .circle {
-    width: 2px;
-    height: 2px;
+    width: .25vw;
+    height: .25vw;
+
+    border: 1px solid #8f7d61;
+
     border-radius: 100%;
     background-color: gray;
-    margin: auto;
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+fa-icon {
+  font-size: 35%;
+  font-weight: bold;
+  color: #dfc469;
+}
+
+.hover-highlight:hover {
+    background-color: #b9a335;
+    border-radius: 1em;
 }

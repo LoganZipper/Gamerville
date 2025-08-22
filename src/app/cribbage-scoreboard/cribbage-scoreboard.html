@@ -1,13 +1,23 @@
 <div class="outerEdge">
-    <div id="opponentRow">
-        <div *ngFor="let num of divs" class="opponent">
-            <div class="circle"></div>
-        </div>
-    </div>
-    <div id="playerRow">
-        <div *ngFor="let num of divs" class="player">
-            <div class="circle"></div>
-        </div>
-    </div>
-
+  <div id="opponentRow">
+    @for (num of divs; track num) {
+      <div class="icon-container">
+          <fa-icon [icon]="faCaretDown" [class.invisible]="!oppPegs.includes(num)"></fa-icon>
+        <div class="circle"></div>
+      </div>
+    }
+  </div>
+  <div id="playerRow">
+    @for (num of divs; track num) {
+      <div class="icon-container">
+          <fa-icon
+            [icon]="faCaretDown"
+            [class.invisible]="!povPegs.includes(num)"
+            class="hover-highlight"
+            draggableIcon>
+          </fa-icon>
+        <div class="circle"></div>
+      </div>
+    }
+  </div>
 </div>
