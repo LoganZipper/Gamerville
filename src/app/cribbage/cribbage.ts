@@ -1,9 +1,8 @@
 // test-game.ts
 
 import { CommonModule } from '@angular/common';
-import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, QueryList, signal, ViewChild, ViewChildren, WritableSignal } from '@angular/core';
 import { Hand } from '../hand/hand';
-import { Scoreboard } from '../scoreboard/scoreboard';
 import { BattlefieldComponent } from '../battlefield/battlefield';
 import { BattleService } from '../battle-service';
 import { DeckService } from '../deck-service';
@@ -12,10 +11,12 @@ import { Subscription } from 'rxjs';
 import { GameState, HandContainer, PlayingCard } from '../satchel';
 import { DeckType, Game, PigeonDestination, PlayerType } from '../enum';
 import { CribbageScoreboard } from "../cribbage-scoreboard/cribbage-scoreboard";
+import { Submit } from "../utilities/submit/submit";
+import { Modal } from '../utilities/modal/modal';
 
 @Component({
   selector: 'app-cribbage',
-  imports: [CommonModule, Hand, Scoreboard, BattlefieldComponent, CribbageScoreboard],
+  imports: [CommonModule, Hand, BattlefieldComponent, CribbageScoreboard, Modal],
   templateUrl: './cribbage.html',
   styleUrl: './cribbage.scss'
 })
@@ -28,7 +29,9 @@ export class Cribbage {
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation) {}
+  private animationStation: AnimationStation) {
+
+  }
 
   //    ╭────────────────╮
   //    │   Properties   │
@@ -58,9 +61,16 @@ constructor(
 
   public fuckThisBullshit: Game = Game.Cribbage;
 
+  // Modal Testing Variables
+  public isOpen: boolean = false;
+  public modalContent: string = "Testing content features";
+
+
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
 
+  // Button
+  @ViewChildren(Submit) submit!: Submit;
 
 
   //    ╭───────────────────╮
@@ -90,8 +100,6 @@ constructor(
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
 
-    console.log('Hands:', hands);
-
     this.povHand = hands[0];
     this.oppHand = hands[1];
 
@@ -101,6 +109,7 @@ constructor(
     this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
     this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
 
+    this.isOpen = true;
   }
 
   private game(): void {
@@ -110,7 +119,12 @@ constructor(
     // await player action
     // player ends turn | progresses turn step
 
+
     // placeholder for auto-score
+  }
+
+  public isSubmittable(): string {
+    return this.battlefields.get(0)?.cards.length == 2 ? "" : ""
   }
 
 

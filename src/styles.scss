@@ -6,9 +6,13 @@ $green-velvet: #2e7d32;
 $fog-interlace: #a5d6a7;
 $gold-accent: #ffd54f;
 
+$gamer-gold: #b6a14dca;
+
 $pure-black: #000000;
 $pure-white: #ffffff;
 $blended-gray: #bdbdbd;
+
+$dimmed: #555555aa;
 
 //----------------------\\
 
@@ -425,9 +429,12 @@ footer p {
 
 /* Utility */
 .hide {
-  display: block;
+  display: none;
 }
 
+.show {
+  display: block; // stupid nonsense because im a fucking idiot and this needs to be here. if the memory is gone, just dont even concern yourself with thinking about this. Delete the comment and walk away.
+}
 
 
 

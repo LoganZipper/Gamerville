@@ -14,6 +14,7 @@
 
   <app-cribbage-scoreboard></app-cribbage-scoreboard>
   <div id="player">
+    <!-- <app-submit [ngClass]="isSubmittable()"></app-submit> -->
     <app-battlefield></app-battlefield>
     <app-hand
       #povRef
@@ -21,3 +22,8 @@
       [handInfo]="povPlayingCards"></app-hand>
   </div>
 </div>
+
+@if (isOpen) {
+  <app-modal [isOpen]="isOpen" [content]="modalContent" (click)="isOpen=false">
+  </app-modal>
+}
