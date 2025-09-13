@@ -1,12 +1,12 @@
 import { GameService } from './../game-service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
-import { TestGameComponent } from "../test-game/test-game";
+import { TestGameComponent } from "../_Games/test-game/test-game";
 import { Subscription } from 'rxjs';
 import { Game } from '../enum';
 import { io } from 'socket.io-client';
 import { Card } from '../card/card';
-import { Cribbage } from "../cribbage/cribbage";
+import { Cribbage } from "../_Games/cribbage/cribbage";
 
 @Component({
   selector: 'app-main',

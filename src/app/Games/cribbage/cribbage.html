@@ -1,0 +1,23 @@
+<!-- This component will get a 5 vs 5 hand size with a line in between -->
+
+<!-- The project will be complete when cards are selectable, with animations for
+            selecting cards as well as simply hovering over them.
+     It doesn't need to look good. It just needs to be serviceable. -->
+
+<div class="cribbage">
+  <div id="opponent">
+    <app-hand
+      #oppRef
+      [playerType]="oppType"
+      [handInfo]="oppPlayingCards"></app-hand>
+  </div>
+
+  <app-scoreboard></app-scoreboard>
+  <div id="player">
+    <app-battlefield></app-battlefield>
+    <app-hand
+      #povRef
+      [playerType]="povType"
+      [handInfo]="povPlayingCards"></app-hand>
+  </div>
+</div>

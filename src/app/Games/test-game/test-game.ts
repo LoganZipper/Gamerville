@@ -1,37 +1,28 @@
 // test-game.ts
-
 import { CommonModule } from '@angular/common';
-import { Component, QueryList, signal, ViewChild, ViewChildren, WritableSignal } from '@angular/core';
-import { Hand } from '../hand/hand';
-import { BattlefieldComponent } from '../battlefield/battlefield';
-import { BattleService } from '../battle-service';
-import { DeckService } from '../deck-service';
-import { AnimationStation } from '../animation-station';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { HandContainer, PlayingCard } from '../../satchel';
+import { BattlefieldComponent } from "../../battlefield/battlefield";
+import { BattleService } from '../../Services/battle-service';
 import { Subscription } from 'rxjs';
-import { GameState, HandContainer, PlayingCard } from '../satchel';
-import { DeckType, Game, PigeonDestination, PlayerType } from '../enum';
-import { CribbageScoreboard } from "../cribbage-scoreboard/cribbage-scoreboard";
-import { Submit } from "../utilities/submit/submit";
-import { Modal } from '../utilities/modal/modal';
+import { DeckService } from '../../Services/deck-service';
+import { AnimationStation } from '../../Services/animation-station';
+import { PigeonDestination, PlayerType } from '../../enum';
+import { Hand } from '../../hand/hand';
+import { Scoreboard } from '../../scoreboard/scoreboard';
 
 @Component({
-  selector: 'app-cribbage',
-  imports: [CommonModule, Hand, BattlefieldComponent, CribbageScoreboard, Modal],
-  templateUrl: './cribbage.html',
-  styleUrl: './cribbage.scss'
+  selector: 'app-test-game',
+  imports: [CommonModule, BattlefieldComponent, Hand, Scoreboard],
+  templateUrl: './test-game.html',
+  styleUrls: ['./test-game.scss']
 })
-export class Cribbage {
-
-
-///////
-//
+export class TestGameComponent implements OnInit {
 
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation) {
-
-  }
+  private animationStation: AnimationStation) {}
 
   //    ╭────────────────╮
   //    │   Properties   │
@@ -39,14 +30,10 @@ constructor(
 
   // Game State
   private fuze$!: Subscription;
-  private turn$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
-
-  private gameState!: GameState;
 
   // Shared Entities
   public commonDeck: PlayingCard[] = [];
-  public playerTurn: PlayerType = PlayerType.Opponent; // Ensure controls are locked
 
   // Player Entities
   @ViewChild('povRef') povHand!: HandContainer;
@@ -59,18 +46,10 @@ constructor(
   public povType: PlayerType = PlayerType.POV;
   public oppType: PlayerType = PlayerType.Opponent;
 
-  public fuckThisBullshit: Game = Game.Cribbage;
-
-  // Modal Testing Variables
-  public isOpen: boolean = false;
-  public modalContent: string = "Testing content features";
-
 
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
 
-  // Button
-  @ViewChildren(Submit) submit!: Submit;
 
 
   //    ╭───────────────────╮
@@ -79,14 +58,12 @@ constructor(
 
 
   ngOnInit() {
-    // this.
     this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
      this.initializeGame();
   }
 
   ngAfterViewInit() {
-    // TODO:
-    this.turn$ = this.battleService.gamestate$.subscribe((gamestate) => this.gameState = gamestate);
+
     // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
   }
 
@@ -95,7 +72,6 @@ constructor(
   }
 
   private initializeGame() {
-    this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
     const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
@@ -108,29 +84,16 @@ constructor(
 
     this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
     this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
-
-    this.isOpen = true;
-  }
-
-  private game(): void {
-    // wait for opponent if their turn
-
-
-    // await player action
-    // player ends turn | progresses turn step
-
-
-    // placeholder for auto-score
-  }
-
-  public isSubmittable(): string {
-    return this.battlefields.get(0)?.cards.length == 2 ? "" : ""
   }
 
 
 //    ╭───────────────────╮
 //    │  Public  Methods  │
 //    ╰───────────────────╯
+
+  public keepScore() {
+    // return {[(this.id ?? 'p001')]: 0, 'p002': 0};
+  }
 
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
@@ -142,4 +105,9 @@ constructor(
       ...this.animationStation.getHandArcStyleVars(idx, count)
     };
   }
+
+  // Saving for later
+  // public getPlayerType(): string {
+  //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
+  // }
 }
