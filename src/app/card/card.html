@@ -3,11 +3,12 @@
     [class.pov]="isPlayer"
     [class.opponent]="!isPlayer"
     #htmlCard
-    [ngStyle]="applyStyles(htmlCard, playingCard, positionInfo.i, positionInfo.c)"
+    [ngStyle]="applyStyles(htmlCard, gameCard, positionInfo.i, positionInfo.c)"
   >
+  @if (isPlayer) {
     <app-card-face
-      *ngIf="isPlayer"
-      [playingCard]="playingCard">
+      [gameCard]="gameCard">
     </app-card-face>
+  }
 
   </div>

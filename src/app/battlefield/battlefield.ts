@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { PlayingCard } from '../satchel';
 import { CommonModule } from '@angular/common';
-import { BattleService } from '../battle-service';
+import { BattleService } from '../_Services/battle-service';
 import { PigeonDestination } from '../enum';
 import { THIS_IS_A_COMMENT } from '../satchel';
 

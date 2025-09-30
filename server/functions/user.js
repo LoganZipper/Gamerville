@@ -43,7 +43,7 @@ function generateRandom(length) {
  * @returns {void}
  */
 function cleanThatShitUp() {[]
-  if(generatedIDs.length > 100)
+  if(generatedIDs.length > 500)
     generatedIDs.shift();
 }
 

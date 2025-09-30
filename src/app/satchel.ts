@@ -24,6 +24,9 @@ export const EuchreTrumpScores = [1, 2, 6, 3, 4, 5]; // Corresponding to EuchreR
 export const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 
+export const _GENERATE_ = 'generate';
+export const _GAME_DATA_ = 'gameData';
+export const _INIT_TEST_GAME_ = 'initTestGame';
 
 
 
@@ -36,26 +39,33 @@ export const THIS_IS_A_COMMENT = false;
 //    │   CARD   CLASS   │
 //    ╰──────────────────╯
 
-
 let playingCardIdCounter = 1;
 
-export class PlayingCard {
-  suit!: string;
-  rank!: string;
+export class GenericCard {
   id: number;
-  value!: number; // Drives game-specific logic
 
-  constructor(suit: string, rank: string);
-  constructor(suit: string, rank: string, id: number);
-  constructor(suit: string, rank: string, value?: number, id?: number) {
-    this.suit = suit;
-    this.rank = rank;
-    this.value = value !== undefined ? value : this.getDefaultValue(rank);
+  constructor(id?: number) {
     if (id !== undefined) {
       this.id = id;
     } else {
       this.id = playingCardIdCounter++;
     }
+  }
+}
+
+
+export class PlayingCard extends GenericCard {
+  suit!: string;
+  rank!: string;
+  value!: number; // Drives game-specific logic
+
+  constructor(suit: string, rank: string);
+  constructor(suit: string, rank: string, id: number);
+  constructor(suit: string, rank: string, value?: number, id?: number) {
+    super(id);
+    this.suit = suit;
+    this.rank = rank;
+    this.value = value !== undefined ? value : this.getDefaultValue(rank);
   }
 
   private getDefaultValue(rank: string): number {
@@ -101,9 +111,6 @@ export class CribbageGamestate extends GameState {
 
 
 export class Pigeon {
-//    ╭───────────────╮
-//    │  Data Fields  │
-//    ╰───────────────╯
     card!: PlayingCard;
     destination!: PigeonDestination;
     id?: number; // Optional ID for card tracking
@@ -116,9 +123,6 @@ export class Pigeon {
 }
 
 export class UltraPigeon {
-//    ╭───────────────╮
-//    │  Data Fields  │
-//    ╰───────────────╯
     cards!: PlayingCard[];
     destination!: PigeonDestination;
 
@@ -129,13 +133,19 @@ export class UltraPigeon {
 }
 
 export class GamePigeon {
-//    ╭───────────────╮
-//    │  Data Fields  │
-//    ╰───────────────╯
     game!: Game;
 
     constructor(game: Game) {
         this.game = game;
+    }
+}
+
+
+export class ManPigeon {
+    isMan!: boolean;
+
+    constructor(isMan: boolean) {
+        this.isMan = isMan;
     }
 }
 
@@ -145,11 +155,15 @@ export class GamePigeon {
 //    │  HAND   CLASS  │
 //    ╰────────────────╯
 
+// export class TheTrueHand {
+//     cards: GenericCard[];
 
-export class HandContainer {
-//    ╭───────────────╮
-//    │  Data Fields  │
-//    ╰───────────────╯
+//     constructor(cards: PlayingCard[]) {
+//         this.cards = cards;
+//     }
+// }
+
+export class HandContainer { // extends TheTrueHand
 
     public cards: PlayingCard[] = []; // The cards in the hand
 

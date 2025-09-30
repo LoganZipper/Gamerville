@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { HandContainer, PlayingCard } from '../../satchel';
 import { BattlefieldComponent } from "../../battlefield/battlefield";
-import { BattleService } from '../../battle-service';
-import { Subscription } from 'rxjs';
-import { DeckService } from '../../deck-service';
-import { AnimationStation } from '../../animation-station';
+import { BattleService } from '../../_Services/battle-service';
+import { Observable, of, Subscription } from 'rxjs';
+import { DeckService } from '../../_Services/deck-service';
+import { AnimationStation } from '../../_Services/animation-station';
 import { PigeonDestination, PlayerType } from '../../enum';
 import { Hand } from '../../hand/hand';
 import { Scoreboard } from '../../scoreboard/scoreboard';
+import { GameService } from '../../_Services/game-service';
+import { LobbyService } from '../../_Services/lobby-service';
+import { debug } from 'console';
 
 @Component({
   selector: 'app-test-game',
@@ -22,34 +25,30 @@ export class TestGameComponent implements OnInit {
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation) {}
+  private animationStation: AnimationStation,
+  private lobbyService: LobbyService,
+  private gameService: GameService,) {}
 
   //    ╭────────────────╮
   //    │   Properties   │
   //    ╰────────────────╯
-
-  // Game State
-  private fuze$!: Subscription;
-  private pigeonKeeper: Subscription | null = null;
-
-  // Shared Entities
-  public commonDeck: PlayingCard[] = [];
-
-  // Player Entities
-  @ViewChild('povRef') povHand!: HandContainer;
-  @ViewChild('oppRef') oppHand!: HandContainer;
-
-  public povPlayingCards: PlayingCard[] = [];
-  public oppPlayingCards: PlayingCard[] = [];
-
-
-  public povType: PlayerType = PlayerType.POV;
-  public oppType: PlayerType = PlayerType.Opponent;
-
-
+  
   // Battlefield Entities
   @ViewChildren(BattlefieldComponent) battlefields!: QueryList<BattlefieldComponent>;
 
+  // Player Entities
+  // @ViewChild('povRef') povHand!: Hand;
+  // @ViewChild('oppRef') oppHand!: Hand;
+  public povType: PlayerType = PlayerType.POV;
+  public oppType: PlayerType = PlayerType.Opponent;
+  public povHand!: HandContainer;
+  public oppHand!: HandContainer;
+
+
+  // Game State
+  private pigeonKeeper: Subscription | null = null;
+
+  public gameReady: boolean = false;
 
 
   //    ╭───────────────────╮
@@ -58,43 +57,39 @@ constructor(
 
 
   ngOnInit() {
-    this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
-     this.initializeGame();
-  }
+    this.battleService.reset$.subscribe(() => this.initializeGame());
+    this.gameService.manPigeon$.subscribe((manPigeon) => {
+        if(manPigeon.isMan) {
+          this.povHand = this.gameService.getPlayerHand(this.lobbyService.getPovID());
+      
+          this.lobbyService.addOpponent('OPP1');
+          this.oppHand = this.gameService.getPlayerHand('OPP1');
 
-  ngAfterViewInit() {
+          console.log("Pov Hand: ", this.povHand);
+          console.log("Opp Hand: ", this.oppHand);
 
-    // this.pigeonKeeper = this.battleService.carrierPigeon$.subscribe((object) => this.povHand.cards.push(object.card));
+          // this.battleService.sendHandToPlayer(new HandContainer(this.povHand.cards), PigeonDestination.POV)
+          // this.battleService.sendHandToPlayer(new HandContainer(this.oppHand.cards), PigeonDestination.Opponent)
+          console.log("Sent hands to players via BattleService.");
+          this.gameReady = true;
+          console.log(this.gameReady);
+        }
+    });
+    this.initializeGame();
   }
 
   ngOnDestroy() {
-    this.fuze$.unsubscribe();
+    this.battleService.reset$.unsubscribe();
   }
 
   private initializeGame() {
-    const hands = this.deckService.prepareNewGame();
-    // TODO: Backend determines who gets dealt first
-    //          - also determined by type of game
-
-    this.povHand = hands[0];
-    this.oppHand = hands[1];
-
-    this.povPlayingCards = hands[0].cards;
-    this.oppPlayingCards = hands[1].cards;
-
-    this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
-    this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
+    this.gameService.initTestGame();
   }
 
 
 //    ╭───────────────────╮
 //    │  Public  Methods  │
 //    ╰───────────────────╯
-
-  public keepScore() {
-    // return {[(this.id ?? 'p001')]: 0, 'p002': 0};
-  }
-
 
   applyStyles(htmlCard: HTMLElement, card: PlayingCard, idx: number, count: number): object {
     // Do the nasty
@@ -105,9 +100,4 @@ constructor(
       ...this.animationStation.getHandArcStyleVars(idx, count)
     };
   }
-
-  // Saving for later
-  // public getPlayerType(): string {
-  //   return this.battleService.carrierPigeon$.getValue().destination === PigeonDestination.POV ? 'POV' : 'Opponent';
-  // }
 }

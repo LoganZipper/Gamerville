@@ -1,13 +1,18 @@
 
 
-
-const duffle = require('../duffle'); // Adjust path as needed
-
+  const { PlayingCard, HandContainer } = require('../duffle.js');
 
   const Standard = 'standard';
   const Euchre = 'euchre';
   const Spitzer = 'spitzer';
   const Experimental = 'experimental';
+
+  const Suits = ['♡', '♢', '♧', '♤'];
+  const Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+  const EuchreRanks = ['9', '10', 'J', 'Q', 'K', 'A'];
+  const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+  const deck = [];
 
 
   //    ╭────────────────────╮
@@ -22,12 +27,12 @@ const duffle = require('../duffle'); // Adjust path as needed
   function generateDeck() {
     switch (this.selectedDeck) {
       case Euchre:
-        return this.createEuchreDeck();
+        return createEuchreDeck();
       case Spitzer:
-        return this.createSpitzerDeck();
+        return createSpitzerDeck();
       case Experimental:
       default:
-        return this.createFullDeck();
+        return createFullDeck();
     }
   }
 
@@ -113,13 +118,13 @@ const duffle = require('../duffle'); // Adjust path as needed
   |* The player receives the first 5 cards, and the opponent receives the next 5 cards.
   |* The remaining cards are left in the common deck.
   |**/
-  function dealCards() {
+  function dealCards(deck) {
     const hands = [];
     // TODO: Implement sequential shuffling options
-    const playerHand = new HandContainer(this.commonDeck.slice(0, 5));
-    const oppHand = new HandContainer(this.commonDeck.slice(5, 10));
+    const playerHand = new HandContainer(deck.slice(0, 5));
+    const oppHand = new HandContainer(deck.slice(5, 10));
     hands.push(playerHand, oppHand);
-    this.commonDeck = this.commonDeck.slice(10);
+    deck = deck.slice(10);
     return hands;
   }
 
@@ -133,15 +138,15 @@ const duffle = require('../duffle'); // Adjust path as needed
   |* Shuffles deck
   |* Deals cards
   |**/
-  function prepareNewGame() {
-    this.commonDeck = this.generateDeck();
-    this.shuffleDeck(this.commonDeck);
-    return this.dealCards();
+  function prepareNewSimpleGame() {
+    deck.push(...generateDeck());
+    shuffleDeck(deck);
+    return dealCards(deck);
   }
 
 
-module.exports = {
-  newGame: prepareNewGame,
-  dealCards: dealCards,
-  shuffleDeck: shuffleDeck,
-}
+  module.exports = {
+    prepareNewSimpleGame,
+    dealCards,
+    shuffleDeck,
+  };

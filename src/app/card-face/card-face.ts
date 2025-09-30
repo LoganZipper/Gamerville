@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PlayingCard } from '../satchel';
+import { GenericCard, PlayingCard } from '../satchel';
 
 @Component({
   selector: 'app-card-face',
@@ -9,6 +9,7 @@ import { PlayingCard } from '../satchel';
 })
 export class CardFace {
 
-  @Input() playingCard!: PlayingCard;
+  @Input() gameCard!: PlayingCard;
+
 
 }

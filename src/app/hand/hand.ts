@@ -1,10 +1,10 @@
 import { PlayerType } from './../enum';
-import { BattleService } from './../battle-service';
-import { AnimationStation } from './../animation-station';
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { PlayingCard, Pigeon, UltraPigeon } from '../satchel';
+import { BattleService } from '../_Services/battle-service';
+import { AnimationStation } from '../_Services/animation-station';
+import { ChangeDetectorRef, Component, input, Input } from '@angular/core';
+import { PlayingCard, Pigeon, UltraPigeon, HandContainer } from '../satchel';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Card } from "../card/card";
 
 @Component({
@@ -15,7 +15,7 @@ import { Card } from "../card/card";
 })
 export class Hand {
 @Input() playerType: PlayerType = PlayerType.Opponent;
-@Input() handInfo: PlayingCard[] = []; // The player's hand of cards
+@Input() gameHand!: HandContainer;
 
 
 //    ╭───────────────╮
@@ -23,7 +23,7 @@ export class Hand {
 //    ╰───────────────╯
 
 public pigeonMan: Subscription = new Subscription();
-public hand: Card[] = []; // The hand of cards to be displayed in the UI
+public ui_hand: Card[] = []; // The hand of cards to be displayed in the UI
 
 public PlayerType = PlayerType;
 
@@ -35,30 +35,31 @@ public PlayerType = PlayerType;
   constructor(
     private animationStation: AnimationStation,
     private battleService: BattleService,
-    private cdr: ChangeDetectorRef
-    ) {}
+    ) {
+      
+    }
 
 
   ngOnInit() {
+    console.log("Hand component initialized for player type: ", this.playerType);
     const subscriptions = [
       // First subscription: Gets the initial hand of cards
       this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
       if (pigeon.destination.toString() == this.playerType) {
-        this.hand.push(...pigeon.cards.map(card => {
+        this.ui_hand.push(...pigeon.cards.map(card => {
         const newCard = new Card(this.animationStation);
-        newCard.playingCard = card;
+        newCard.gameCard = card;
         return newCard;
         }));
-        this.cdr.detectChanges();
+        console.log("Hand after receiving UltraPigeon: ", this.ui_hand);
       }
       }),
       // Second subscription: Gets cards returned from battlefield
       this.battleService.carrierPigeon$.subscribe((pigeon: Pigeon) => {
       if (pigeon.destination.toString() == this.playerType) {
         const newCard = new Card(this.animationStation);
-        newCard.playingCard = pigeon.card;
-        this.hand.push(newCard);
-        this.cdr.detectChanges();
+        newCard.gameCard = pigeon.card;
+        this.ui_hand.push(newCard);
       }
       })
     ];
@@ -66,13 +67,15 @@ public PlayerType = PlayerType;
     subscriptions.forEach(sub => this.pigeonMan.add(sub));
   }
 
-  ngOnChanges() {
-  this.hand = this.handInfo.map(card => {
-    const newCard = new Card(this.animationStation);
-    newCard.playingCard = card;
-    return newCard;
-  });
-}
+//   ngOnChanges() {
+//   if (this.gameHand) {
+//     this.ui_hand = this.gameHand.cards.map(card => {
+//       const newCard = new Card(this.animationStation);
+//       newCard.gameCard = card;
+//       return newCard;
+//     });
+//   }
+// }
 
 
 //    ╭────────────────╮
@@ -102,8 +105,7 @@ public PlayerType = PlayerType;
 
     // Current Hand remove card
     // TODO: Use a service to remove the card from the hand
-    this.hand = this.hand.filter(c => c.playingCard.id !== playingCard.id);
-    this.handInfo = this.handInfo.filter(c => c.id !== playingCard.id);
+    this.ui_hand = this.ui_hand.filter(c => c.gameCard.id !== playingCard.id);
   }
 
 }

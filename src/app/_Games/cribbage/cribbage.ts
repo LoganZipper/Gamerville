@@ -4,15 +4,16 @@ import { CommonModule } from '@angular/common';
 import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Hand } from '../../hand/hand';
 import { BattlefieldComponent } from '../../battlefield/battlefield';
-import { BattleService } from '../../battle-service';
-import { DeckService } from '../../deck-service';
-import { AnimationStation } from '../../animation-station';
+import { BattleService } from '../../_Services/battle-service';
+import { DeckService } from '../../_Services/deck-service';
+import { AnimationStation } from '../../_Services/animation-station';
 import { Subscription } from 'rxjs';
 import { GameState, HandContainer, PlayingCard } from '../../satchel';
 import { DeckType, Game, PigeonDestination, PlayerType } from '../../enum';
 import { CribbageScoreboard } from "../../cribbage-scoreboard/cribbage-scoreboard";
 import { Submit } from "../../utilities/submit/submit";
 import { Modal } from '../../utilities/modal/modal';
+import { GameService } from '../../_Services/game-service';
 
 @Component({
   selector: 'app-cribbage',
@@ -29,7 +30,8 @@ export class Cribbage {
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
-  private animationStation: AnimationStation) {
+  private animationStation: AnimationStation,
+  private gameService: GameService) {
 
   }
 
@@ -64,6 +66,7 @@ constructor(
   // Modal Testing Variables
   public isOpen: boolean = false;
   public modalContent: string = "Testing content features";
+  public whoTheFckIAm: string = "POV";
 
 
   // Battlefield Entities
@@ -95,33 +98,34 @@ constructor(
   }
 
   private initializeGame() {
-    this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
-    const hands = this.deckService.prepareNewGame();
+    // this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
+    // const hands = this.deckService.prepareNewGame();
     // TODO: Backend determines who gets dealt first
     //          - also determined by type of game
+    this.gameService.initTestGame();
 
-    this.povHand = hands[0];
-    this.oppHand = hands[1];
+    this.povHand = this.gameService.getPlayerHand((this.gameService.getPovID()));
+    this.oppHand = this.gameService.getPlayerHand('OPP1');
 
-    this.povPlayingCards = hands[0].cards;
-    this.oppPlayingCards = hands[1].cards;
+    this.povPlayingCards = this.povHand.cards;
+    this.oppPlayingCards = this.oppHand.cards;
 
-    this.battleService.sendHandToPlayer(hands[0].cards, PigeonDestination.POV)
-    this.battleService.sendHandToPlayer(hands[1].cards, PigeonDestination.Opponent)
+    this.battleService.sendHandToPlayer(new HandContainer(this.povHand.cards), PigeonDestination.POV)
+    this.battleService.sendHandToPlayer(new HandContainer(this.oppHand.cards), PigeonDestination.Opponent)
 
     this.isOpen = true;
+
+    this.game();
   }
 
   private game(): void {
-    // wait for opponent if their turn
-
-
-    // await player action
-    // player ends turn | progresses turn step
-
-
-    // placeholder for auto-score
+    this.gameService.whoseTurnIsIt().then((id) => {
+      this.whoTheFckIAm = id;
+      console.log(this.whoTheFckIAm);
+      // wait for opponent if their turn
+    });
   }
+
 
   public isSubmittable(): string {
     return this.battlefields.get(0)?.cards.length == 2 ? "" : ""

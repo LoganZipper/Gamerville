@@ -1,21 +1,12 @@
-const Suits = ['♡', '♢', '♧', '♤'];
-
-
-module.exports = Suits;
-
-
-
-
-
-
-const Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-const EuchreRanks = ['9', '10', 'J', 'Q', 'K', 'A'];
-const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+export const Suits = ['♡', '♢', '♧', '♤'];
+export const Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+export const EuchreRanks = ['9', '10', 'J', 'Q', 'K', 'A'];
+export const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 
 let playingCardIdCounter = 1;
 
-class PlayingCard {
+export class PlayingCard {
   suit;
   rank;
   id;
@@ -38,7 +29,13 @@ class PlayingCard {
 // //    ╰────────────────╯
 
 
-// export class HandContainer {
+export class HandContainer {
+  cards;
+
+  constructor(initialCards = []) {
+    this.cards = initialCards;
+  }
+}
 // //    ╭───────────────╮
 // //    │  Data Fields  │
 // //    ╰───────────────╯
@@ -61,12 +58,3 @@ class PlayingCard {
 //         this.cards = this.cards.filter(c => c !== card);
 //     }
 // }
-
-
-module.exports = {
-  Suits: Suits,
-  PlayingCard: PlayingCard,
-  Ranks: Ranks,
-  EuchreRanks: EuchreRanks,
-  SpitzerRanks, SpitzerRanks,
-}

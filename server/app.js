@@ -9,6 +9,7 @@
 
 // Very basic
 const User = require('./functions/user');
+const Game = require('./functions/game');
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -19,9 +20,12 @@ const io = require('socket.io')(http, {
   }
 });
 const cors = require('cors');
+const portNum = 3000;
 
 app.use(cors());
 app.use(express.json());
+
+const users = new Map();
 
 // Suits = ['♡', '♢', '♧', '♤'];
 
@@ -41,14 +45,35 @@ app.use(express.json());
 
 //TODO: make enum
 io.on('connection', (socket) => {
-  console.log('Sending id:', User.generateID())
   socket.emit('generate', User.generateID());
+  
+
+  socket.on('initTestGame', (playerIDs) => {
+    // socket.emit('gameData', Game.newTestGame(playerIDs));
+    users.set(socket.id, playerIDs);
+    socket.emit('gameData', Array.from(Game.newTestGame(playerIDs).entries()).map(([id, hand]) => ({ id, hand })));
+  });
+
+  // Universal Draw Card Call
+  // socket.on('drawCard', (playerID) => {
+  //   const gameData = Game.drawCard(playerID);
+  //   socket.emit('gameData', gameData);
+  // });
+
+  socket.on('getCurrentPlayer', () => {
+    const currentPlayer = Game.getCurrentPlayer();
+    socket.emit('currentPlayer', currentPlayer);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('client disconnected');
+    users.delete(socket.id);
+  });
+});
+
+
+http.listen(portNum, () => {
+  console.log(`Server is active baby! Port is ${portNum}`)
 })
 
-io.on('disconnect', () => {
-  console.log('client disconnected')
-})
 
-http.listen(3000, () => {
-  console.log('Server is active baby! Port is 3000')
-})

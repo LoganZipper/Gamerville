@@ -3,13 +3,13 @@
 <!-- The project will be complete when cards are selectable, with animations for
             selecting cards as well as simply hovering over them.
      It doesn't need to look good. It just needs to be serviceable. -->
-
+     
+     @if (isOpen) {
 <div class="cribbage">
   <div id="opponent">
     <app-hand
       #oppRef
-      [playerType]="oppType"
-      [handInfo]="oppPlayingCards"></app-hand>
+      [playerType]="oppType"></app-hand>
   </div>
 
   <app-cribbage-scoreboard></app-cribbage-scoreboard>
@@ -18,12 +18,12 @@
     <app-battlefield></app-battlefield>
     <app-hand
       #povRef
-      [playerType]="povType"
-      [handInfo]="povPlayingCards"></app-hand>
+      [playerType]="povType"></app-hand>
   </div>
 </div>
 
-@if (isOpen) {
   <app-modal [isOpen]="isOpen" [content]="modalContent" (click)="isOpen=false">
   </app-modal>
 }
+  <app-modal [isOpen]="isOpen" [content]="whoTheFckIAm" (click)="isOpen=false">
+  </app-modal>
