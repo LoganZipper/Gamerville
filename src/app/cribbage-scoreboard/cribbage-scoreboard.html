@@ -9,13 +9,18 @@
   </div>
   <div id="playerRow">
     @for (num of divs; track num) {
-      <div class="icon-container">
+      <div class="icon-container"
+        (dragover)="onPegDragOver($event)"
+        (drop)="onPegDrop($event)">
           <fa-icon
             [icon]="faCaretDown"
             [class.invisible]="!povPegs.includes(num)"
-            class="hover-highlight"
-            draggableIcon>
+            [class.pointer]="povPegs.includes(num)"
+            [attr.draggable]="povPegs.includes(num)"
+            (dragstart)="onPegDragStart($event, num)"
+            (dragend)="onPegDragEnd($event, num)">
           </fa-icon>
+        
         <div class="circle"></div>
       </div>
     }

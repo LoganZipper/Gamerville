@@ -6,7 +6,7 @@ import { DraggableIcon } from "../draggable-icon";
 
 @Component({
   selector: 'app-cribbage-scoreboard',
-  imports: [CommonModule, FontAwesomeModule, DraggableIcon],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './cribbage-scoreboard.html',
   styleUrl: './cribbage-scoreboard.scss'
 })
@@ -18,4 +18,29 @@ export class CribbageScoreboard {
 
   faChevronDown = faChevronDown;
   faCaretDown = faCaretDown;
+
+
+
+  onPegDragStart(e: DragEvent, num: number) {
+    // if (!e.dataTransfer) return;
+    console.log(e);
+    // e.dataTransfer.setData("Text", (e.target as HTMLElement).id);
+  }
+
+  onPegDragEnd(e: DragEvent, num: number) {
+
+  }
+
+  onPegDragOver(e: DragEvent) {
+    // e.preventDefault();
+  }
+
+  onPegDrop(e: any) {
+    // if(!e.dataTransfer || !e.target) return;
+    console.log(e)
+    console.log(e.target)
+    console.log(e.target.classList)
+    e.target.classList.remove('invisible');
+    // e.preventDefault();
+  }
 }
