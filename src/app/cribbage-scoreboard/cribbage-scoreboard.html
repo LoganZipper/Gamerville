@@ -14,6 +14,7 @@
         (drop)="onPegDrop($event)">
           <fa-icon
             [icon]="faCaretDown"
+            id="peg-pov-{{num}}"
             [class.invisible]="!povPegs.includes(num)"
             [class.pointer]="povPegs.includes(num)"
             [attr.draggable]="povPegs.includes(num)"

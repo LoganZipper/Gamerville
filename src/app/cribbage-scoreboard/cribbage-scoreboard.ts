@@ -32,15 +32,33 @@ export class CribbageScoreboard {
   }
 
   onPegDragOver(e: DragEvent) {
-    // e.preventDefault();
+    e.preventDefault();
   }
 
   onPegDrop(e: any) {
     // if(!e.dataTransfer || !e.target) return;
+    e.preventDefault();
     console.log(e)
     console.log(e.target)
     console.log(e.target.classList)
-    e.target.classList.remove('invisible');
-    // e.preventDefault();
+    // if (e.target.classlist.contains('peg-pov')) return;
+    const pegNum: number = parseInt(e.target.id.replace('peg-pov-', ''));
+    if (isNaN(pegNum)) return;
+
+    // e.target.classList.remove('invisible');
+    
+    this.removePeg(this.povPegs[1])
+    this.addPeg(pegNum);
+    // this.povPegs.sort((a, b) => a - b);
+    console.log(this.povPegs);
   }
+
+
+  addPeg(num: number) {
+    this.povPegs = [num, ...this.povPegs];
+  }
+
+removePeg(num: number) {
+  this.povPegs = this.povPegs.filter(n => n !== num);
+}
 }
