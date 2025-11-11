@@ -9,11 +9,11 @@ Currently it is in early stages with a pretty UI and not much gameplay to show.
 More information to come as the project develops.
 
 ## Server Startup Instructions:
- 1. Install dependencies: npm install
- 2. Start the server: node app.js
+ 1. Start the server: node app.js
 
 ## Client Connection Instructions:
- 1. Start frontend: npm run start
+ 1. Install dependencies: npm install
+ 2. Start frontend: npm run start
 
 
 
