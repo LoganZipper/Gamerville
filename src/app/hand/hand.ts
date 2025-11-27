@@ -1,11 +1,12 @@
 import { PlayerType } from './../enum';
 import { BattleService } from '../_Services/battle-service';
 import { AnimationStation } from '../_Services/animation-station';
-import { ChangeDetectorRef, Component, input, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PlayingCard, Pigeon, UltraPigeon, HandContainer } from '../satchel';
 import { CommonModule } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Card } from "../card/card";
+import { GameService } from '../_Services/game-service';
 
 @Component({
   selector: 'app-hand',
@@ -35,36 +36,46 @@ public PlayerType = PlayerType;
   constructor(
     private animationStation: AnimationStation,
     private battleService: BattleService,
+    private gameService: GameService
     ) {
-      
+      console.log("HEY WHAT THE FUCK");
     }
 
 
   ngOnInit() {
     console.log("Hand component initialized for player type: ", this.playerType);
-    const subscriptions = [
-      // First subscription: Gets the initial hand of cards
-      this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
-      if (pigeon.destination.toString() == this.playerType) {
-        this.ui_hand.push(...pigeon.cards.map(card => {
-        const newCard = new Card(this.animationStation);
+    console.log(this.gameHand)    
+
+    this.ui_hand = this.gameHand.cards.map(card => {
+       const newCard = new Card(this.animationStation);
         newCard.gameCard = card;
         return newCard;
-        }));
-        console.log("Hand after receiving UltraPigeon: ", this.ui_hand);
-      }
-      }),
-      // Second subscription: Gets cards returned from battlefield
-      this.battleService.carrierPigeon$.subscribe((pigeon: Pigeon) => {
-      if (pigeon.destination.toString() == this.playerType) {
-        const newCard = new Card(this.animationStation);
-        newCard.gameCard = pigeon.card;
-        this.ui_hand.push(newCard);
-      }
-      })
-    ];
+    });
 
-    subscriptions.forEach(sub => this.pigeonMan.add(sub));
+    // const subscriptions = [
+    //   // First subscription: Gets the initial hand of cards
+      
+    //   this.battleService.ultraPigeon$.subscribe((pigeon: UltraPigeon) => {
+    //     console.log('testing')
+    //   if (pigeon.destination.toString() == this.playerType) {
+    //     this.ui_hand = [...this.ui_hand].concat(...pigeon.cards.map(card => {
+    //     const newCard = new Card(this.animationStation);
+    //     newCard.gameCard = card;
+    //     return newCard;
+    //     }));
+    //   }
+    //   }),
+    //   // Second subscription: Gets cards returned from battlefield
+    //   this.battleService.carrierPigeon$.subscribe((pigeon: Pigeon) => {
+    //   if (pigeon.destination.toString() == this.playerType) {
+    //     const newCard = new Card(this.animationStation);
+    //     newCard.gameCard = pigeon.card;
+    //     this.ui_hand = [...this.ui_hand].concat(newCard);
+    //   }
+    //   })
+    // ];
+
+    // subscriptions.forEach(sub => this.pigeonMan.add(sub));
   }
 
 //   ngOnChanges() {

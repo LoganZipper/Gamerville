@@ -17,7 +17,7 @@ generatedIDs.add('0000')
 function generateID() {
   cleanThatShitUp();
 
-  let generatedID = '0001';
+  let generatedID = '0000';
   while(generatedIDs.has(generatedID))
     generatedID = generateRandom(ID_LENGTH);
 

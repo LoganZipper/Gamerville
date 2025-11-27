@@ -13,6 +13,7 @@
   const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
   const deck = [];
+  const decks = new Map();
 
 
   //    ╭────────────────────╮
@@ -138,7 +139,8 @@
   |* Shuffles deck
   |* Deals cards
   |**/
-  function prepareNewSimpleGame() {
+  function prepareNewSimpleGame(playerIDs) {
+    // decks.set(JSON.stringify(playerIDs), generateDeck())
     deck.push(...generateDeck());
     shuffleDeck(deck);
     return dealCards(deck);

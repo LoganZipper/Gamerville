@@ -1,9 +1,10 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Game } from '../enum';
 import { GameService } from '../_Services/game-service';
-import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, Inject, PLATFORM_ID } from '@angular/core';
 import { _GENERATE_ } from '../satchel';
 import { LobbyService } from '../_Services/lobby-service';
+import { DEFAULT_USER } from '../satchel';
 
 @Component({
   selector: 'app-header',
@@ -12,23 +13,45 @@ import { LobbyService } from '../_Services/lobby-service';
   styleUrl: './header.scss'
 })
 export class Header {
-  public id: string = '. . .'; // No default, will be set by server
+  public id: string = DEFAULT_USER; // No default, will be set by server
   public numberOfSlots = 0;
 
   constructor(private gameService: GameService,
     private lobbyService: LobbyService,
     private zone: NgZone,
-    private cdr: ChangeDetectorRef) {}
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.gameService.gimmeTheFuckingSocket().on(_GENERATE_, (id: string) => {
-      this.zone.run(() => {
-        this.id = id;
-        this.gameService.setSoloPlayerID(id);
-        this.lobbyService.setPovID(id);
-        this.cdr.markForCheck();
+    console.log('hello?')
+
+    this.id = sessionStorage.getItem('UID') ?? DEFAULT_USER;
+    this.gameService.init(this.id)
+
+    // if(this.isUserInititialized()) {
+    //   this.gameService.setGameInProgressStatus(true);
+    //   this.zone.run(() => {
+    //     this.gameService.setSoloPlayerID(this.id);
+    //     this.lobbyService.setPovID(this.id);
+    //     this.cdr.markForCheck();
+    //   })
+    // }
+    // else {
+      this.gameService.gimmeTheFuckingSocket().on(_GENERATE_, (id: string) => {
+        this.zone.run(() => {
+          this.gameService.setGameInProgressStatus(this.id == id);
+          this.id = id;
+          sessionStorage.setItem('UID', id);
+          this.gameService.setSoloPlayerID(id);
+          this.lobbyService.setPovID(id);
+          this.cdr.markForCheck();
+        });
       });
-    });
+    // }
+  }
+
+  ngAfterViewInit() {
+    
   }
 
   public getNumberOfSlots(): number {
@@ -45,10 +68,12 @@ export class Header {
       case Game.Euchre     : return this.gameService.setGame(Game.Euchre);
       case Game.Experiment : return this.gameService.setGame(Game.Experiment);
       case Game.MonoDeal   : return this.gameService.setGame(Game.MonoDeal);
-    }
+    }  
+  }
 
-
-    
-
+  private isUserInititialized(): boolean {
+    this.id = sessionStorage.getItem('UID') ?? DEFAULT_USER;
+    console.log(`Session returned ID is: ${this.id}`)
+    return this.id !== DEFAULT_USER;
   }
 }

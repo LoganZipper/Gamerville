@@ -23,11 +23,13 @@ export const EuchreTrumpScores = [1, 2, 6, 3, 4, 5]; // Corresponding to EuchreR
 
 export const SpitzerRanks = ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
+export const DEFAULT_USER = ''
 
 export const _GENERATE_ = 'generate';
 export const _GAME_DATA_ = 'gameData';
 export const _INIT_TEST_GAME_ = 'initTestGame';
-
+export const _RESUME_TEST_GAME_ = 'resumeTestGame';
+export const _INIT_ = 'init';
 
 
 export const THIS_IS_A_COMMENT = false;
@@ -149,6 +151,14 @@ export class ManPigeon {
     }
 }
 
+
+export class LobbyPigeon {
+    isLobby!: boolean;
+
+    constructor(isLobby: boolean) {
+        this.isLobby = isLobby;
+    }
+}
 
 
 //    ╭────────────────╮
