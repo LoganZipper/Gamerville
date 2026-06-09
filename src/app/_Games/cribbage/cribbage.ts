@@ -23,10 +23,6 @@ import { GameService } from '../../_Services/game-service';
 })
 export class Cribbage {
 
-
-///////
-//
-
 constructor(
   private battleService: BattleService,
   private deckService: DeckService,
@@ -66,8 +62,8 @@ constructor(
 
   // Modal Testing Variables
   public isOpen: boolean = false;
-  public modalContent: string = "Testing content features";
-  public whoTheFckIAm: string = "POV";
+  public modalContent: string = "Start/Resume Game";
+  public whoTheFckIAm: string = "Send Cards";
 
 
   // Battlefield Entities
@@ -87,7 +83,7 @@ constructor(
     this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
 
     
-     this.initializeGame();
+    //  this.initializeGame();
   }
 
   ngAfterViewInit() {
@@ -100,7 +96,7 @@ constructor(
     this.fuze$.unsubscribe();
   }
 
-  private initializeGame() {
+  public initializeGame() {
     console.log('Hello Traveler')
     // this.deckService.selectedDeck = DeckType.Standard; //Ensure full deck
     // const hands = this.deckService.prepareNewGame();
@@ -142,12 +138,24 @@ constructor(
       this.whoTheFckIAm = id;
       console.log(this.whoTheFckIAm);
       // wait for opponent if their turn
+      // i.e. disable controls and socket.on.whatever
     });
   }
 
 
   public isSubmittable(): string {
     return this.battlefields.get(0)?.cards.length == 2 ? "" : ""
+  }
+
+  public sendCards(): void {
+    // Take cards in Battlefield and send to server
+    // Don't remove hand, rather, update hand from server response
+  }
+
+  public canSendCards(): boolean {
+    this.game
+    // Check battlefield
+    // If card represents
   }
 
 

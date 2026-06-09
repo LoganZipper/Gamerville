@@ -23,31 +23,19 @@ export class Header {
   ) {}
 
   ngOnInit() {
-    console.log('hello?')
-
     this.id = sessionStorage.getItem('UID') ?? DEFAULT_USER;
     this.gameService.init(this.id)
 
-    // if(this.isUserInititialized()) {
-    //   this.gameService.setGameInProgressStatus(true);
-    //   this.zone.run(() => {
-    //     this.gameService.setSoloPlayerID(this.id);
-    //     this.lobbyService.setPovID(this.id);
-    //     this.cdr.markForCheck();
-    //   })
-    // }
-    // else {
-      this.gameService.gimmeTheFuckingSocket().on(_GENERATE_, (id: string) => {
-        this.zone.run(() => {
-          this.gameService.setGameInProgressStatus(this.id == id);
-          this.id = id;
-          sessionStorage.setItem('UID', id);
-          this.gameService.setSoloPlayerID(id);
-          this.lobbyService.setPovID(id);
-          this.cdr.markForCheck();
-        });
+    this.gameService.gimmeTheFuckingSocket().on(_GENERATE_, (id: string) => {
+      this.zone.run(() => {
+        this.gameService.setGameInProgressStatus(this.id == id);
+        this.id = id;
+        sessionStorage.setItem('UID', id);
+        this.gameService.setSoloPlayerID(id);
+        this.lobbyService.setPovID(id);
+        this.cdr.markForCheck();
       });
-    // }
+    });
   }
 
   ngAfterViewInit() {

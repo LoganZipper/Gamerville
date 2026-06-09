@@ -31,3 +31,9 @@ export enum Game {
   MonoDeal = 'deal',
 }
 
+export enum Action_Cribbage {
+  SendCrib = 2,
+  SendPeg = 1,
+  SendCount = 0
+}
+

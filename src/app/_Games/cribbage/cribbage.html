@@ -25,8 +25,8 @@
   </div>
 </div>
 
-  <app-modal [isOpen]="isOpen" [content]="modalContent" (click)="isOpen=false">
+  <app-modal [isOpen]="isOpen" [content]="modalContent" (click)="initializeGame()">
   </app-modal>
 
-  <app-modal [isOpen]="isOpen" [content]="whoTheFckIAm" (click)="isOpen=false">
+  <app-modal [isOpen]="canSendCards()" [content]="whoTheFckIAm" (click)="sendCards()">
   </app-modal>
