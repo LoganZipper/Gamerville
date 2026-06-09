@@ -1,4 +1,4 @@
-import { _GAME_DATA_, _INIT_TEST_GAME_, GamePigeon, HandContainer, ManPigeon } from '../satchel';
+import { _INIT_, _GAME_DATA_, _INIT_TEST_GAME_, _RESUME_TEST_GAME_, GamePigeon, HandContainer, ManPigeon } from '../satchel';
 import { Injectable } from '@angular/core';
 import { Game } from '../enum';
 import { Subject } from 'rxjs';
@@ -21,33 +21,54 @@ export class GameService {
   private playerHands: Map<string, HandContainer> = new Map();
 
   private currentGame: Game | null = null;
-  private gameInProgress: boolean = false;
+  private isGameOngoing: boolean = false;
 
   public gamePigeon$ = new Subject<GamePigeon>();
   public manPigeon$ = new Subject<ManPigeon>();
 
 
   constructor(private lobbyService: LobbyService) {
-    this.uid = this.lobbyService.getPovID();
-
     this.socket.on(_GAME_DATA_, (data: any) => {
       data.forEach((entry: { id: string; hand: HandContainer }) => {
         this.playerHands.set(entry.id, entry.hand);
       });
       this.manPigeon$.next(new ManPigeon(true));
     });
-  }
+      
+    }
 
   //    ╭─────────────────╮
   //    │   BIG Methods   │
   //    ╰─────────────────╯
 
+  public init(UID: string): void {
+    this.socket.emit(_INIT_, UID);
+  }
+
   public initTestGame(): void {
-    this.currentGame = Game.Cribbage;
-    this.gameInProgress = true;
-    this.gamePigeon$.next(new GamePigeon(Game.Cribbage));
-    this.playerIDs = [this.uid, 'OPP1'];
-    this.socket.emit(_INIT_TEST_GAME_, this.playerIDs);
+    console.log('Suck my ass')
+    this.lobbyService.lobbyPigeon$.subscribe((isGangweed) => {
+      this.currentGame = Game.Cribbage;
+      this.isGameOngoing = true;
+      this.gamePigeon$.next(new GamePigeon(Game.Cribbage));
+      this.uid = isGangweed;
+      console.log(`My UserID: ${this.uid}`);
+      this.playerIDs = [this.uid, 'OPP1'];
+      this.socket.emit(_INIT_TEST_GAME_, this.playerIDs);
+    })
+  }
+
+  public resumeTestGame(): void {
+    console.log('Suck my cock')
+    // this.lobbyService.lobbyPigeon$.subscribe((isGangweed) => {
+      this.currentGame = Game.Cribbage;
+      this.isGameOngoing = true;
+      this.gamePigeon$.next(new GamePigeon(Game.Cribbage));
+      this.uid = this.lobbyService.getPovID();
+      console.log(`My UserID: ${this.uid}`);
+      this.playerIDs = [this.uid, 'OPP1'];
+      this.socket.emit(_RESUME_TEST_GAME_, this.playerIDs);
+    // })
   }
 
   // This method is bad but I'm an idiot
@@ -81,7 +102,6 @@ export class GameService {
   }
 
   public getPlayerHand(playerID: string): HandContainer {
-    console.log(`Getting hand for player ${playerID}:`, this.playerHands.get(playerID));
     return this.playerHands.get(playerID) ?? new HandContainer();
   }
 
@@ -101,6 +121,16 @@ export class GameService {
     });
   }
 
+  // Used in Header component.
+  // That needs to change at some point
+  public isGameInProgress(): boolean {
+    return this.isGameOngoing;
+  }
+
+  public setGameInProgressStatus(status: boolean): void {
+    this.isGameOngoing = status;
+  }
+
 
   //    ╭─────────────────────╮
   //    │   Private Methods   │
@@ -109,6 +139,6 @@ export class GameService {
   private reset() {
     this.playerHands.clear();
     this.currentGame = null;
-    this.gameInProgress = false;
+    this.isGameOngoing = false;
   }
 }

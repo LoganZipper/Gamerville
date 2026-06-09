@@ -1,22 +1,21 @@
 // test-game.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HandContainer, PlayingCard } from '../../satchel';
 import { BattlefieldComponent } from "../../battlefield/battlefield";
 import { BattleService } from '../../_Services/battle-service';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DeckService } from '../../_Services/deck-service';
 import { AnimationStation } from '../../_Services/animation-station';
-import { PigeonDestination, PlayerType } from '../../enum';
+import { PlayerType } from '../../enum';
 import { Hand } from '../../hand/hand';
 import { Scoreboard } from '../../scoreboard/scoreboard';
 import { GameService } from '../../_Services/game-service';
 import { LobbyService } from '../../_Services/lobby-service';
-import { debug } from 'console';
 
 @Component({
   selector: 'app-test-game',
-  imports: [CommonModule, BattlefieldComponent, Hand, Scoreboard],
+  imports: [CommonModule, BattlefieldComponent, Hand],
   templateUrl: './test-game.html',
   styleUrls: ['./test-game.scss']
 })

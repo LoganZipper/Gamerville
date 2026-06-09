@@ -1,8 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronDown, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import { DraggableIcon } from "../draggable-icon";
+// import { DraggableIcon } from "../draggable-icon";
 
 @Component({
   selector: 'app-cribbage-scoreboard',
@@ -34,6 +34,10 @@ export class CribbageScoreboard {
   onPegDragOver(e: DragEvent) {
     e.preventDefault();
   }
+
+
+  //TODO: Make the drog more foriving. Somehow there needs to be a greater accepted radius.
+  //      Or, otherwise make it so the peg snaps to the closest hole.
 
   onPegDrop(e: any) {
     // if(!e.dataTransfer || !e.target) return;

@@ -45,13 +45,28 @@ const users = new Map();
 
 //TODO: make enum
 io.on('connection', (socket) => {
-  socket.emit('generate', User.generateID());
+  socket.on('init', (UID) => {
+    if(!Game.getPlayerExists(UID))
+      socket.emit('generate', User.generateID());
+    else
+      socket.emit('generate', UID);
+  })
   
-
+  //TODO: Modify this function or create another 
+  //      to allow resending cards from game-in-progress
+  //        -> Refresh page
   socket.on('initTestGame', (playerIDs) => {
     // socket.emit('gameData', Game.newTestGame(playerIDs));
+    playerIDs = playerIDs.sort();
     users.set(socket.id, playerIDs);
     socket.emit('gameData', Array.from(Game.newTestGame(playerIDs).entries()).map(([id, hand]) => ({ id, hand })));
+  });
+
+  socket.on('resumeTestGame', (playerIDs) => {
+    // socket.emit('gameData', Game.newTestGame(playerIDs));
+    // users.set(socket.id, playerIDs);
+    playerIDs = playerIDs.sort();
+    socket.emit('gameData', Array.from(Game.resumeTestGame(playerIDs).entries()).map(([id, hand]) => ({ id, hand })));
   });
 
   // Universal Draw Card Call
@@ -60,8 +75,8 @@ io.on('connection', (socket) => {
   //   socket.emit('gameData', gameData);
   // });
 
-  socket.on('getCurrentPlayer', () => {
-    const currentPlayer = Game.getCurrentPlayer();
+  socket.on('getCurrentPlayer', (playerIDs) => {
+    const currentPlayer = Game.getCurrentPlayer(playerIDs);
     socket.emit('currentPlayer', currentPlayer);
   });
 

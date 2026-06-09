@@ -3,18 +3,23 @@ const { prepareNewSimpleGame } = require('./deck.js');
 const { HandContainer } = require('../duffle.js');
 
 const IDs = ['TEST'];
+const mappedHands = new Map();
 var currentPlayerIndex = 0;
 
 newTestGame = function(playerIDs) {
-    const casinoDeal = prepareNewSimpleGame();
-    const mappedHands = new Map();
+    const casinoDeal = prepareNewSimpleGame(playerIDs);
     IDs.length = 0;
     IDs.push(...playerIDs);
-    console.log('AAAHHH', IDs);
     playerIDs.forEach(id => {
         mappedHands.set(id, casinoDeal.pop() || new HandContainer());
     });
-    console.log('Mapped Hands:', mappedHands);
+    return mappedHands;
+}
+
+resumeTestGame = function(playerIDs) {
+    playerIDs.forEach(id => {
+        mappedHands.get(id);
+    });
     return mappedHands;
 }
 
@@ -34,15 +39,25 @@ nextTurn = function() {
 // }
 
 
-getCurrentPlayer = function() {
+getCurrentPlayer = function(playerIDs) {
     console.log('Current Player Index:', currentPlayerIndex);
-    console.log('Player IDs:', IDs);
-    return (this.playerIDs && this.playerIDs[currentPlayerIndex]) ? this.playerIDs[currentPlayerIndex] : '0000';
+    console.log('Player IDs:', playerIDs);
+    // return (this.playerIDs && this.playerIDs[currentPlayerIndex]) ? this.playerIDs[currentPlayerIndex] : '0000';
+    return (IDs && IDs[currentPlayerIndex]) ? IDs[currentPlayerIndex] : '0000';
+    
+}
+
+getPlayerExists = function(UID) {
+    if(IDs.includes(UID))
+        return true
+    return false
 }
 
 
 module.exports = {
     newTestGame,
+    resumeTestGame,
     // drawCard,
-    getCurrentPlayer
+    getCurrentPlayer,
+    getPlayerExists
   };

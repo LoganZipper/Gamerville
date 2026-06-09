@@ -4,12 +4,13 @@
             selecting cards as well as simply hovering over them.
      It doesn't need to look good. It just needs to be serviceable. -->
      
-     @if (isOpen) {
 <div class="cribbage">
   <div id="opponent">
     <app-hand
       #oppRef
-      [playerType]="oppType"></app-hand>
+      *ngIf="oppHand"
+      [playerType]="oppType"
+      [gameHand]="oppHand"></app-hand>
   </div>
 
   <app-cribbage-scoreboard></app-cribbage-scoreboard>
@@ -18,12 +19,14 @@
     <app-battlefield></app-battlefield>
     <app-hand
       #povRef
-      [playerType]="povType"></app-hand>
+      *ngIf="povHand"
+      [playerType]="povType"
+      [gameHand]="povHand"></app-hand>
   </div>
 </div>
 
   <app-modal [isOpen]="isOpen" [content]="modalContent" (click)="isOpen=false">
   </app-modal>
-}
+
   <app-modal [isOpen]="isOpen" [content]="whoTheFckIAm" (click)="isOpen=false">
   </app-modal>
