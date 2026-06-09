@@ -153,7 +153,8 @@ constructor(
   }
 
   public canSendCards(): boolean {
-    this.game
+    // this.game
+    return false;
     // Check battlefield
     // If card represents
   }
