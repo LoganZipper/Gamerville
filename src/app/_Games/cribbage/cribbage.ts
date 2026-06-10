@@ -9,7 +9,7 @@ import { DeckService } from '../../_Services/deck-service';
 import { AnimationStation } from '../../_Services/animation-station';
 import { Subscription } from 'rxjs';
 import { GameState, HandContainer, PlayingCard } from '../../satchel';
-import { Game, PigeonDestination, PlayerType } from '../../enum';
+import { Action_Cribbage, Game, PigeonDestination, PlayerType } from '../../enum';
 import { CribbageScoreboard } from "../../cribbage-scoreboard/cribbage-scoreboard";
 import { Submit } from "../../utilities/submit/submit";
 import { Modal } from '../../utilities/modal/modal';
@@ -40,6 +40,7 @@ constructor(
   private fuze$!: Subscription;
   private turn$!: Subscription;
   private pigeonKeeper: Subscription | null = null;
+  private currentAction: Action_Cribbage = Action_Cribbage.SendCrib;
 
   private gameState!: GameState;
 
@@ -152,11 +153,29 @@ constructor(
     // Don't remove hand, rather, update hand from server response
   }
 
+  // public countCards(): void {}
+
   public canSendCards(): boolean {
-    // this.game
-    return false;
+    return true;
+    return this.canSendCardsHelper(this.currentAction);
+  }
+
+  private canSendCardsHelper(action: Action_Cribbage): boolean {
+    switch(action) {
+      case Action_Cribbage.SendCrib:
+        return this.battlefields.get(0)?.cards.length == Action_Cribbage.SendCrib;
+      case Action_Cribbage.SendPeg:
+        return this.battlefields.get(0)?.cards.length == Action_Cribbage.SendPeg;
+
+      case Action_Cribbage.SendCount:
+        return this.battlefields.get(0)?.cards.length == Action_Cribbage.SendCount;
+
+        // Just in case more actions added later
+        default:
+          return false;
+    }
     // Check battlefield
-    // If card represents
+    // If card represents [cardAction idea]
   }
 
 
