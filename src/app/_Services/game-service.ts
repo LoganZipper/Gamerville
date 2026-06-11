@@ -17,6 +17,7 @@ export class GameService {
   private socket = io('http://localhost:3000');
 
   private uid: string = '0000'; // Default until set by server
+  private oid: string = 'OPP1'; // Default until set by player
   private playerIDs: string[] = [];
   private playerHands: Map<string, HandContainer> = new Map();
 
@@ -46,29 +47,23 @@ export class GameService {
   }
 
   public initTestGame(): void {
-    console.log('Suck my ass')
     this.lobbyService.lobbyPigeon$.subscribe((isGangweed) => {
-      this.currentGame = Game.Cribbage;
       this.isGameOngoing = true;
-      this.gamePigeon$.next(new GamePigeon(Game.Cribbage));
+      this.setGame(Game.Cribbage);
+
       this.uid = isGangweed;
-      console.log(`My UserID: ${this.uid}`);
-      this.playerIDs = [this.uid, 'OPP1'];
+      this.playerIDs = [this.uid, this.oid];
       this.socket.emit(_INIT_TEST_GAME_, this.playerIDs);
     })
   }
 
   public resumeTestGame(): void {
-    console.log('Suck my cock')
-    // this.lobbyService.lobbyPigeon$.subscribe((isGangweed) => {
-      this.currentGame = Game.Cribbage;
-      this.isGameOngoing = true;
-      this.gamePigeon$.next(new GamePigeon(Game.Cribbage));
-      this.uid = this.lobbyService.getPovID();
-      console.log(`My UserID: ${this.uid}`);
-      this.playerIDs = [this.uid, 'OPP1'];
-      this.socket.emit(_RESUME_TEST_GAME_, this.playerIDs);
-    // })
+    this.isGameOngoing = true;
+    this.setGame(Game.Cribbage);
+
+    this.uid = this.lobbyService.getPovID();
+    this.playerIDs = [this.uid, this.oid];
+    this.socket.emit(_RESUME_TEST_GAME_, this.playerIDs);
   }
 
   // This method is bad but I'm an idiot
@@ -81,6 +76,7 @@ export class GameService {
   //    ╰────────────────────╯
 
   public setGame(game: Game): void {
+    this.currentGame = Game.Cribbage;
     this.gamePigeon$.next(new GamePigeon(game));
   }
 
@@ -99,6 +95,10 @@ export class GameService {
 
   public getPovID(): string {
     return this.uid;
+  }
+
+  public getOppID(): string {
+    return this.oid;
   }
 
   public getPlayerHand(playerID: string): HandContainer {

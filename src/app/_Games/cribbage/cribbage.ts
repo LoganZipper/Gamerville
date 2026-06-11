@@ -84,7 +84,7 @@ constructor(
     this.fuze$ = this.battleService.reset$.subscribe(() => this.initializeGame());
 
     
-    //  this.initializeGame();
+     this.initializeGame();
   }
 
   ngAfterViewInit() {
@@ -109,13 +109,9 @@ constructor(
       this.gameService.resumeTestGame();
     
     this.gameService.manPigeon$.subscribe((manPigeon) => {
-      // console.log(manPigeon);
-      // if(!manPigeon.isMan) return;
       
       this.povHand = this.gameService.getPlayerHand((this.gameService.getPovID()));
-      this.oppHand = this.gameService.getPlayerHand('OPP1');
-
-      console.log(this.povHand)
+      this.oppHand = this.gameService.getPlayerHand(this.gameService.getOppID());
   
       this.povPlayingCards = this.povHand.cards;
       this.oppPlayingCards = this.oppHand.cards;
@@ -129,9 +125,6 @@ constructor(
   
       this.game();
     });
-    // this.gameService.gamePigeon$.subscribe((gamePigeon) => {
-    //   console.log(gamePigeon);
-    // });
   }
 
   private game(): void {
